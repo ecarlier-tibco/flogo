@@ -76,11 +76,15 @@ func (a *PushoverActivity) Eval(context activity.Context) (done bool, err error)
 	m := pushover.Message{}
 
 	m.Message = message.(string)
+	// TURN OFF priority until I understand issue on flogo-web
+	/*
 	if context.GetInput(ivPriority) != nil {
 		m.Priority = context.GetInput(ivPriority).(int)
 	} else {
-		m.Priority = 0;
-	}
+	*/
+	m.Priority = 0;
+	//}
+	
 	if messageTitle != nil {
 		m.Title = messageTitle.(string)
 	}
