@@ -14,7 +14,7 @@ Install and Run flogo-web on your development machine (could be your Raspberry P
 	
 ## Configuring the app
 
-The application flow configuration is in ``pitemp/cli/pitemp_flow.json file``
+Editing the flow in Flogo Web, you may want to adapt flow and configuration to your own setup.
 Especially:
 * You may have to change hostname or ip address to access the WebIOPI service on your Pi (all REST activities)
 * You have to set the user key and autorization token for your PushOver account settings (both PushOver activities)
