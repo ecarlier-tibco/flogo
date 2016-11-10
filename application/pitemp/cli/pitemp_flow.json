@@ -1,0 +1,422 @@
+{
+    "name": "Sense Temperature and control led",
+    "model": "tibco-simple",
+    "type": 1,
+    "attributes": [],
+    "rootTask": {
+        "id": 1,
+        "type": 1,
+        "activityType": "",
+        "name": "root",
+        "tasks": [
+            {
+                "id": 2,
+                "name": "Get Temperature",
+                "type": 1,
+                "activityType": "tibco-rest",
+                "attributes": [
+                    {
+                        "name": "method",
+                        "value": "GET",
+                        "type": "string"
+                    },
+                    {
+                        "name": "uri",
+                        "value": "http://raspberrypi:8000/devices/temp/sensor/temperature/c",
+                        "type": "string"
+                    }
+                ]
+            },
+            {
+                "id": 3,
+                "name": "Log Temperatue",
+                "type": 1,
+                "activityType": "tibco-log",
+                "attributes": [
+                    {
+                        "name": "message",
+                        "value": "",
+                        "type": "string"
+                    },
+                    {
+                        "name": "flowInfo",
+                        "value": "true",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "addToFlow",
+                        "value": "true",
+                        "type": "boolean"
+                    }
+                ],
+                "inputMappings": [
+                    {
+                        "type": 1,
+                        "value": "{A2.result}",
+                        "mapTo": "message"
+                    }
+                ]
+            },
+            {
+                "id": 4,
+                "name": "Set LED On",
+                "type": 1,
+                "activityType": "tibco-rest",
+                "attributes": [
+                    {
+                        "name": "method",
+                        "value": "POST",
+                        "type": "string"
+                    },
+                    {
+                        "name": "uri",
+                        "value": "http://raspberrypi:8000/GPIO/23/value/1",
+                        "type": "string"
+                    }
+                ]
+            },
+            {
+                "id": 5,
+                "name": "Log LED ON",
+                "type": 1,
+                "activityType": "tibco-log",
+                "attributes": [
+                    {
+                        "name": "message",
+                        "value": "Switched LED ON",
+                        "type": "string"
+                    },
+                    {
+                        "name": "flowInfo",
+                        "value": "true",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "addToFlow",
+                        "value": "true",
+                        "type": "boolean"
+                    }
+                ]
+            },
+            {
+                "id": 11,
+                "name": "IncrementAlertsCount",
+                "type": 1,
+                "activityType": "tibco-counter",
+                "attributes": [
+                    {
+                        "name": "counterName",
+                        "value": "alertsCount",
+                        "type": "string"
+                    },
+                    {
+                        "name": "increment",
+                        "value": "true",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "reset",
+                        "value": false,
+                        "type": "boolean"
+                    }
+                ]
+            },
+            {
+                "id": 13,
+                "name": "Log Alert",
+                "type": 1,
+                "activityType": "tibco-log",
+                "attributes": [
+                    {
+                        "name": "message",
+                        "value": "ALERT ALERT",
+                        "type": "string"
+                    },
+                    {
+                        "name": "flowInfo",
+                        "value": "true",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "addToFlow",
+                        "value": "true",
+                        "type": "boolean"
+                    }
+                ]
+            },
+            {
+                "id": 6,
+                "name": "Set LED Off",
+                "type": 1,
+                "activityType": "tibco-rest",
+                "attributes": [
+                    {
+                        "name": "method",
+                        "value": "POST",
+                        "type": "string"
+                    },
+                    {
+                        "name": "uri",
+                        "value": "http://raspberrypi:8000/GPIO/23/value/0",
+                        "type": "string"
+                    }
+                ]
+            },
+            {
+                "id": 7,
+                "name": "Log LED OFF",
+                "type": 1,
+                "activityType": "tibco-log",
+                "attributes": [
+                    {
+                        "name": "message",
+                        "value": "Switched LED OFF",
+                        "type": "string"
+                    },
+                    {
+                        "name": "flowInfo",
+                        "value": "true",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "addToFlow",
+                        "value": "true",
+                        "type": "boolean"
+                    }
+                ]
+            },
+            {
+                "id": 12,
+                "name": "Read Alerts Count",
+                "type": 1,
+                "activityType": "tibco-counter",
+                "attributes": [
+                    {
+                        "name": "counterName",
+                        "value": "alertsCount",
+                        "type": "string"
+                    },
+                    {
+                        "name": "increment",
+                        "value": "false",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "reset",
+                        "value": "false",
+                        "type": "boolean"
+                    }
+                ]
+            },
+            {
+                "id": 15,
+                "name": "Reset Alert Counter",
+                "type": 1,
+                "activityType": "tibco-counter",
+                "attributes": [
+                    {
+                        "name": "counterName",
+                        "value": "alertsCount",
+                        "type": "string"
+                    },
+                    {
+                        "name": "increment",
+                        "value": false,
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "reset",
+                        "value": "true",
+                        "type": "boolean"
+                    }
+                ]
+            },
+            {
+                "id": 14,
+                "name": "Log Clear Alert",
+                "type": 1,
+                "activityType": "tibco-log",
+                "attributes": [
+                    {
+                        "name": "message",
+                        "value": "ALERT IS CLEARED",
+                        "type": "string"
+                    },
+                    {
+                        "name": "flowInfo",
+                        "value": "true",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "addToFlow",
+                        "value": "true",
+                        "type": "boolean"
+                    }
+                ]
+            },
+            {  
+            	"id": 16,
+            	"name": "PushOver Clear Notification",
+            	"type":1,
+            	"activityType":"pushover",
+            	"attributes":[  
+    				{
+      					"name": "userKey",
+      					"value": "[YOUR_KEY]",
+      					"type": "string"
+    				},
+    				{
+      					"name": "authToken",
+      					"value": "[YOUR_APP_TOKEN]",
+      					"type": "string"
+    				},
+    				{
+      					"name": "message",
+      					"value": "Temperature is back to normal. We are all good ! :-)",
+      					"type": "string"
+    				}
+            	]
+         	},
+            {  
+            	"id": 17,
+            	"name": "PushOver Alert Notification",
+            	"type":1,
+            	"activityType":"pushover",
+            	"attributes":[  
+    				{
+                                        "name": "userKey",
+                                        "value": "[YOUR_KEY]",
+                                        "type": "string"
+                                },
+                                {
+                                        "name": "authToken",
+                                        "value": "[YOUR_APP_TOKEN]",
+                                        "type": "string"
+                                },
+				{
+      					"name": "message",
+      					"value": "Careful ! Temperature is getting high ! :-(",
+      					"type": "string"
+    				}
+            	]
+         	}
+        ],
+        "links": [
+            {
+                "id": 1,
+                "from": 2,
+                "to": 3,
+                "type": 0
+            },
+            {
+                "id": 2,
+                "from": 3,
+                "to": 4,
+                "type": 1,
+                "value": "${A2.result}>=23"
+            },
+            {
+                "id": 3,
+                "from": 4,
+                "to": 5,
+                "type": 0
+            },
+            {
+                "id": 4,
+                "from": 5,
+                "to": 11,
+                "type": 0
+            },
+            {
+                "id": 5,
+                "from": 11,
+                "to": 13,
+                "type": 1,
+                "value": "${A11.value}==1"
+            },
+            {
+                "id": 6,
+                "from": 3,
+                "to": 6,
+                "type": 1,
+                "value": "${A2.result}<23"
+            },
+            {
+                "id": 7,
+                "from": 6,
+                "to": 7,
+                "type": 0
+            },
+            {
+                "id": 8,
+                "from": 7,
+                "to": 12,
+                "type": 0
+            },
+            {
+                "id": 9,
+                "from": 12,
+                "to": 15,
+                "type": 0
+            },
+            {
+                "id": 10,
+                "from": 12,
+                "to": 14,
+                "type": 1,
+                "value": "${A12.value}>0"
+            },
+            {
+                "id": 11,
+                "from": 14,
+                "to": 16,
+                "type": 0
+            },
+            {
+                "id": 12,
+                "from": 13,
+                "to": 17,
+                "type": 0
+            }
+        ]
+    },
+    "errorHandlerTask": {
+        "id": 8,
+        "type": 1,
+        "activityType": "",
+        "name": "error_root",
+        "tasks": [
+            {
+                "id": 10,
+                "name": "Log Error",
+                "type": 1,
+                "activityType": "tibco-log",
+                "attributes": [
+                    {
+                        "name": "message",
+                        "value": "",
+                        "type": "string"
+                    },
+                    {
+                        "name": "flowInfo",
+                        "value": "true",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "addToFlow",
+                        "value": "true",
+                        "type": "boolean"
+                    }
+                ],
+                "inputMappings": [
+                    {
+                        "type": 1,
+                        "value": "{E.message}",
+                        "mapTo": "message"
+                    }
+                ]
+            }
+        ],
+        "links": []
+    }
+}

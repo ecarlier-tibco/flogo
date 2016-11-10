@@ -1,0 +1,18 @@
+{
+  "triggers": [
+    {
+      "name": "tibco-timer",
+      "settings": {},
+      "endpoints": [
+        {
+          "actionType": "flow",
+          "actionURI": "embedded://pitemp_flow",
+          "settings": {
+            "repeating": "true",
+	    "seconds": "2"
+          }
+        }
+      ]
+    }
+  ]
+}
