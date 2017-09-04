@@ -10,11 +10,13 @@
    "inputs":[
     {
       "name": "userKey",
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     {
       "name": "authToken",
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     {
       "name": "message",
@@ -42,7 +44,7 @@
     },
     {
       "name": "priority",
-      "type": "int",
+      "type": "integer",
       "value": 0
     }
   ],
