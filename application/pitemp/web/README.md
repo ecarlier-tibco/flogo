@@ -5,7 +5,7 @@
 Install and Run flogo-web on your development machine (could be your Raspberry Pi or your own desktop) 
 
 ## Importing the application in flogo-web
-* Access flogo-web @ http://localhost:3010
+* Access flogo-web @ http://localhost:3303
 * Click **Import a Flow** and select json file provided in this same directory ``pitemp_web_flow.json``
 * Import the PushOver activity
 	* Click + Button in a flow
