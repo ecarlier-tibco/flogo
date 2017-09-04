@@ -1,7 +1,8 @@
 {
   "name": "pushover",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "title": "PushOver Notification Activity",
+  "type": "flogo:activity",
   "description": "Simple activity to send notifications to devices across PushOver Service",
   "author": "Eric Carlier <ecarlier@tibco.com>",
   "inputs":[
