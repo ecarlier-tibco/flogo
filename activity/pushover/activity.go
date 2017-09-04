@@ -4,12 +4,12 @@ import (
 	"time"
 
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
-	"github.com/op/go-logging"
+	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"github.com/toorop/pushover"
 )
 
 // log is the default package logger
-var log = logging.MustGetLogger("activity-pushover")
+var log = logger.GetLogger("activity-pushover")
 
 const (
 	ivUserKey      = "userKey"
