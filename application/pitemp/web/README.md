@@ -6,11 +6,11 @@ Install and Run flogo-web on your development machine (could be your Raspberry P
 
 ## Importing the application in flogo-web
 * Access flogo-web @ http://localhost:3303
-* Click **Import a Flow** and select json file provided in this same directory ``pitemp_web_flow.json``
 * Import the PushOver activity
 	* Click + Button in a flow
 	* On appearing right pane, click **Install new Activity**
 	* Go to bottom of popped up window, enter ``https://github.com/ecarlier-tibco/flogo/activity/pushover`` in _Install activity from URL_ text box, and click on right-side download icon
+* Click **Import** button when you are on the page listing your apps and select json file provided in this same directory ``pitemp_web_flow.json``
 	
 ## Configuring the app
 
@@ -18,7 +18,7 @@ Editing the flow in Flogo Web, you may want to adapt flow and configuration to y
 Especially:
 * You may have to change hostname or ip address to access the WebIOPI service on your Pi (all REST activities)
 * You have to set the user key and autorization token for your PushOver account settings (both PushOver activities)
-* You may want to change the temperature threshold (currently set to 23°C) on which to raise an alert (present in 2 flow links) 
+* You may want to change the temperature threshold (currently set to 27°C) on which to raise an alert (present in 2 flow links) 
 
 ## Building the app
 * When editing the flow, mouse over the 3-dots button on top right of the window
