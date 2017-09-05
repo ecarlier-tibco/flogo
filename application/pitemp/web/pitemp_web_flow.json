@@ -1,1 +1,469 @@
-{"name":"Sense Temperature and control led","description":"A simple flow using Raspberry PI GPIO to get temperature from a sensor and update led light status depending on temperature level. Also sends Notification through Pushover on alert and alert clear","paths":{"root":{"is":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI0NDg4MzQ6OjE5NzE1MC4xNjU"},"nodes":{"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI0NDg4MzQ6OjE5NzE1MC4xNjU":{"id":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI0NDg4MzQ6OjE5NzE1MC4xNjU","taskID":"RmxvZ286OlRyaWdnZXI6OjE0NzcwNDI0NTIyOTg","type":3,"children":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI2MTU0Mzc6OjM4NDMuODUwMDAwMDAwMDAwNA"],"parents":[]},"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI2MTU0Mzc6OjM4NDMuODUwMDAwMDAwMDAwNA":{"id":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI2MTU0Mzc6OjM4NDMuODUwMDAwMDAwMDAwNA","taskID":"Mg","type":5,"children":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI2MjM2MzE6OjEyMDM4LjYy"],"parents":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI0NDg4MzQ6OjE5NzE1MC4xNjU"]},"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI2MjM2MzE6OjEyMDM4LjYy":{"id":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI2MjM2MzE6OjEyMDM4LjYy","taskID":"Mw","type":5,"children":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI3MjQwMzg6OjExMjQ0OC42Ng","RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI5MTIzNDU6OjMwMDc2MS4xMTAwMDAwMDAwNA"],"parents":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI2MTU0Mzc6OjM4NDMuODUwMDAwMDAwMDAwNA"]},"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI3MjQwMzg6OjExMjQ0OC42Ng":{"id":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI3MjQwMzg6OjExMjQ0OC42Ng","taskID":"RmxvZ286OkJyYW5jaDo6MTQ3NzA0MjcyNDAzOA","type":6,"children":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI3MjQwNDA6OjExMjQ1MC4xMjUwMDAwMDAwMQ"],"parents":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI2MjM2MzE6OjEyMDM4LjYy"]},"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI3MjQwNDA6OjExMjQ1MC4xMjUwMDAwMDAwMQ":{"id":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI3MjQwNDA6OjExMjQ1MC4xMjUwMDAwMDAwMQ","taskID":"NA","type":5,"children":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDMyMzI1NjI6OjYyMDk4Ny45NjUwMDAwMDAx"],"parents":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI3MjQwMzg6OjExMjQ0OC42Ng"]},"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI5MTIzNDU6OjMwMDc2MS4xMTAwMDAwMDAwNA":{"id":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI5MTIzNDU6OjMwMDc2MS4xMTAwMDAwMDAwNA","taskID":"RmxvZ286OkJyYW5jaDo6MTQ3NzA0MjkxMjM0NQ","type":6,"children":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI5MTIzNDY6OjMwMDc2Mi4zMQ"],"parents":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI2MjM2MzE6OjEyMDM4LjYy"]},"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI5MTIzNDY6OjMwMDc2Mi4zMQ":{"id":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI5MTIzNDY6OjMwMDc2Mi4zMQ","taskID":"Ng","type":5,"children":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDMyMzI1NjI6OjYyMDk4OC4wMg"],"parents":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI5MTIzNDU6OjMwMDc2MS4xMTAwMDAwMDAwNA"]},"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDMyMzI1NjI6OjYyMDk4Ny45NjUwMDAwMDAx":{"id":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDMyMzI1NjI6OjYyMDk4Ny45NjUwMDAwMDAx","taskID":"MTE","type":5,"children":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNTA1NDc5Njg6OjQzNDI2NDkuODQ1"],"parents":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI3MjQwNDA6OjExMjQ1MC4xMjUwMDAwMDAwMQ"]},"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDMyMzI1NjI6OjYyMDk4OC4wMg":{"id":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDMyMzI1NjI6OjYyMDk4OC4wMg","taskID":"MTI","type":5,"children":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNTEyNDAyMTI6OjE0NjQuNTYwMDAwMDAwMDAwMg","RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNTA5MDcyODY6OjQ3MDE5NzcuNjk1"],"parents":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDI5MTIzNDY6OjMwMDc2Mi4zMQ"]},"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNTA1NDc5Njg6OjQzNDI2NDkuODQ1":{"id":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNTA1NDc5Njg6OjQzNDI2NDkuODQ1","taskID":"RmxvZ286OkJyYW5jaDo6MTQ3NzA1MDU0Nzk2Nw","type":6,"children":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNTA1NDc5NzA6OjQzNDI2NTEuNjk"],"parents":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDMyMzI1NjI6OjYyMDk4Ny45NjUwMDAwMDAx"]},"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNTA1NDc5NzA6OjQzNDI2NTEuNjk":{"id":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNTA1NDc5NzA6OjQzNDI2NTEuNjk","taskID":"MTM","type":5,"children":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0Nzg3NzY5NjE1NDk6Ojk5NjQwNDEuMjAwMDAwMDAx"],"parents":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNTA1NDc5Njg6OjQzNDI2NDkuODQ1"]},"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNTA5MDcyODY6OjQ3MDE5NzcuNjk1":{"id":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNTA5MDcyODY6OjQ3MDE5NzcuNjk1","taskID":"RmxvZ286OkJyYW5jaDo6MTQ3NzA1MDkwNzI4NQ","type":6,"children":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNTA5MDcyODg6OjQ3MDE5NzkuMTY1MDAwMDAx"],"parents":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDMyMzI1NjI6OjYyMDk4OC4wMg"]},"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNTA5MDcyODg6OjQ3MDE5NzkuMTY1MDAwMDAx":{"id":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNTA5MDcyODg6OjQ3MDE5NzkuMTY1MDAwMDAx","taskID":"MTQ","type":5,"children":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0Nzg3NzY5ODE3OTQ6Ojk5ODQyODcuNDk"],"parents":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNTA5MDcyODY6OjQ3MDE5NzcuNjk1"]},"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNTEyNDAyMTI6OjE0NjQuNTYwMDAwMDAwMDAwMg":{"id":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNTEyNDAyMTI6OjE0NjQuNTYwMDAwMDAwMDAwMg","taskID":"MTU","type":5,"children":[],"parents":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDMyMzI1NjI6OjYyMDk4OC4wMg"]},"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0Nzg3NzY5NjE1NDk6Ojk5NjQwNDEuMjAwMDAwMDAx":{"id":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0Nzg3NzY5NjE1NDk6Ojk5NjQwNDEuMjAwMDAwMDAx","taskID":"MTg","type":5,"children":[],"parents":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNTA1NDc5NzA6OjQzNDI2NTEuNjk"]},"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0Nzg3NzY5ODE3OTQ6Ojk5ODQyODcuNDk":{"id":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0Nzg3NzY5ODE3OTQ6Ojk5ODQyODcuNDk","taskID":"MTk","type":5,"children":[],"parents":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNTA5MDcyODg6OjQ3MDE5NzkuMTY1MDAwMDAx"]}}},"items":{"RmxvZ286OlRyaWdnZXI6OjE0NzcwNDI0NTIyOTg":{"type":0,"triggerType":"tibco-timer","name":"Timer","version":"0.0.1","title":"Timer","description":"Simple Timer trigger","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/trigger/timer","settings":[],"outputs":[{"name":"params","type":6,"value":null},{"name":"content","type":4,"value":null}],"endpoint":{"settings":[{"name":"repeating","type":"string","value":"true"},{"name":"startDate","type":"string"},{"name":"hours","type":"string"},{"name":"minutes","type":"string"},{"name":"seconds","type":"string","value":"2"}]},"__schema":{"name":"tibco-timer","version":"0.0.1","title":"Timer","description":"Simple Timer trigger","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/trigger/timer","settings":[],"outputs":[{"name":"params","type":"params"},{"name":"content","type":"object"}],"endpoint":{"settings":[{"name":"repeating","type":"string"},{"name":"startDate","type":"string"},{"name":"hours","type":"string"},{"name":"minutes","type":"string"},{"name":"seconds","type":"string"}]}},"author":"Anonymous","where":"github.com/TIBCOSoftware/flogo-contrib/trigger/timer","installed":true,"id":"RmxvZ286OlRyaWdnZXI6OjE0NzcwNDI0NTIyOTg","__props":{"outputs":[{"name":"params","type":6,"value":null},{"name":"content","type":4,"value":null}],"errors":[]},"__status":{"hasRun":true,"isRunning":false}},"Mg":{"type":1,"activityType":"tibco-rest","name":"Get Temperature","version":"0.0.1","title":"REST Activity","description":"Simple REST Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/rest","attributes":{"inputs":[{"name":"method","type":0,"required":true,"allowed":["GET","POST","PUT","PATCH","DELETE"],"value":"GET"},{"name":"uri","type":0,"required":true,"value":"http://raspberrypi:8000/devices/temp/sensor/temperature/c"},{"name":"pathParams","type":6,"value":null},{"name":"queryParams","type":6,"value":null},{"name":"content","type":4,"value":null}],"outputs":[{"name":"result","type":4}]},"__schema":{"name":"tibco-rest","version":"0.0.1","title":"REST Activity","description":"Simple REST Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/rest","inputs":[{"name":"method","type":"string","required":true,"allowed":["GET","POST","PUT","PATCH","DELETE"]},{"name":"uri","type":"string","required":true},{"name":"pathParams","type":"params"},{"name":"queryParams","type":"params"},{"name":"content","type":"object"}],"outputs":[{"name":"result","type":"object"}]},"author":"Anonymous","where":"github.com/TIBCOSoftware/flogo-contrib/activity/rest","installed":true,"id":"Mg"},"Mw":{"type":1,"activityType":"tibco-log","name":"Log Temperatue","version":"0.0.1","title":"Log Message","description":"Simple Log Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/log","attributes":{"inputs":[{"name":"message","type":0,"value":""},{"name":"flowInfo","type":3,"value":"true"},{"name":"addToFlow","type":3,"value":"true"}],"outputs":[{"name":"message","type":0}]},"__schema":{"name":"tibco-log","version":"0.0.1","title":"Log Message","description":"Simple Log Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/log","inputs":[{"name":"message","type":"string","value":""},{"name":"flowInfo","type":"boolean","value":"true"},{"name":"addToFlow","type":"boolean","value":"true"}],"outputs":[{"name":"message","type":"string"}]},"author":"Anonymous","where":"file:///src/submodules/flogo-web/dist/submodules/flogo-contrib/activity/log","installed":true,"id":"Mw","inputMappings":[{"type":1,"mapTo":"message","value":"{A2.result}"}]},"RmxvZ286OkJyYW5jaDo6MTQ3NzA0MjcyNDAzOA":{"id":"RmxvZ286OkJyYW5jaDo6MTQ3NzA0MjcyNDAzOA","type":2,"condition":"${A2.result}>=23"},"NA":{"type":1,"activityType":"tibco-rest","name":"Set LED On","version":"0.0.1","title":"REST Activity","description":"Simple REST Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/rest","attributes":{"inputs":[{"name":"method","type":0,"required":true,"allowed":["GET","POST","PUT","PATCH","DELETE"],"value":"POST"},{"name":"uri","type":0,"required":true,"value":"http://raspberrypi:8000/GPIO/23/value/1"},{"name":"pathParams","type":6,"value":null},{"name":"queryParams","type":6,"value":null},{"name":"content","type":4,"value":null}],"outputs":[{"name":"result","type":4}]},"__schema":{"name":"tibco-rest","version":"0.0.1","title":"REST Activity","description":"Simple REST Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/rest","inputs":[{"name":"method","type":"string","required":true,"allowed":["GET","POST","PUT","PATCH","DELETE"]},{"name":"uri","type":"string","required":true},{"name":"pathParams","type":"params"},{"name":"queryParams","type":"params"},{"name":"content","type":"object"}],"outputs":[{"name":"result","type":"object"}]},"author":"Anonymous","where":"github.com/TIBCOSoftware/flogo-contrib/activity/rest","installed":true,"id":"NA"},"RmxvZ286OkJyYW5jaDo6MTQ3NzA0MjkxMjM0NQ":{"id":"RmxvZ286OkJyYW5jaDo6MTQ3NzA0MjkxMjM0NQ","type":2,"condition":"${A2.result}<23"},"Ng":{"type":1,"activityType":"tibco-rest","name":"Set LED Off","version":"0.0.1","title":"REST Activity","description":"Simple REST Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/rest","attributes":{"inputs":[{"name":"method","type":0,"required":true,"allowed":["GET","POST","PUT","PATCH","DELETE"],"value":"POST"},{"name":"uri","type":0,"required":true,"value":"http://raspberrypi:8000/GPIO/23/value/0"},{"name":"pathParams","type":6,"value":null},{"name":"queryParams","type":6,"value":null},{"name":"content","type":4,"value":null}],"outputs":[{"name":"result","type":4}]},"__schema":{"name":"tibco-rest","version":"0.0.1","title":"REST Activity","description":"Simple REST Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/rest","inputs":[{"name":"method","type":"string","required":true,"allowed":["GET","POST","PUT","PATCH","DELETE"]},{"name":"uri","type":"string","required":true},{"name":"pathParams","type":"params"},{"name":"queryParams","type":"params"},{"name":"content","type":"object"}],"outputs":[{"name":"result","type":"object"}]},"author":"Anonymous","where":"github.com/TIBCOSoftware/flogo-contrib/activity/rest","installed":true,"id":"Ng"},"MTE":{"type":1,"activityType":"tibco-counter","name":"IncrementAlertsCount","version":"0.0.1","title":"Counter Activity","description":"Simple Global Counter Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/counter","attributes":{"inputs":[{"name":"counterName","type":0,"required":true,"value":"alertsCount"},{"name":"increment","type":3,"value":"true"},{"name":"reset","type":3,"value":false}],"outputs":[{"name":"value","type":1}]},"__schema":{"name":"tibco-counter","version":"0.0.1","title":"Counter Activity","description":"Simple Global Counter Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/counter","inputs":[{"name":"counterName","type":"string","required":true},{"name":"increment","type":"boolean"},{"name":"reset","type":"boolean"}],"outputs":[{"name":"value","type":"integer"}]},"author":"Anonymous","where":"file:///Users/pdhar/dev/cloud/flogo-web/dist/submodules/flogo-contrib/activity/counter","installed":true,"id":"MTE"},"MTI":{"type":1,"activityType":"tibco-counter","name":"Read Alerts Count","version":"0.0.1","title":"Counter Activity","description":"Simple Global Counter Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/counter","attributes":{"inputs":[{"name":"counterName","type":0,"required":true,"value":"alertsCount"},{"name":"increment","type":3,"value":"false"},{"name":"reset","type":3,"value":"false"}],"outputs":[{"name":"value","type":1}]},"__schema":{"name":"tibco-counter","version":"0.0.1","title":"Counter Activity","description":"Simple Global Counter Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/counter","inputs":[{"name":"counterName","type":"string","required":true},{"name":"increment","type":"boolean"},{"name":"reset","type":"boolean"}],"outputs":[{"name":"value","type":"integer"}]},"author":"Anonymous","where":"file:///Users/pdhar/dev/cloud/flogo-web/dist/submodules/flogo-contrib/activity/counter","installed":true,"id":"MTI"},"RmxvZ286OkJyYW5jaDo6MTQ3NzA1MDU0Nzk2Nw":{"id":"RmxvZ286OkJyYW5jaDo6MTQ3NzA1MDU0Nzk2Nw","type":2,"condition":"${A11.value}==1"},"MTM":{"type":1,"activityType":"tibco-log","name":"Log Alert","version":"0.0.1","title":"Log Message","description":"Simple Log Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/log","attributes":{"inputs":[{"name":"message","type":0,"value":"ALERT ALERT"},{"name":"flowInfo","type":3,"value":"true"},{"name":"addToFlow","type":3,"value":"true"}],"outputs":[{"name":"message","type":0}]},"__schema":{"name":"tibco-log","version":"0.0.1","title":"Log Message","description":"Simple Log Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/log","inputs":[{"name":"message","type":"string","value":""},{"name":"flowInfo","type":"boolean","value":"true"},{"name":"addToFlow","type":"boolean","value":"true"}],"outputs":[{"name":"message","type":"string"}]},"author":"Anonymous","where":"file:///src/submodules/flogo-web/dist/submodules/flogo-contrib/activity/log","installed":true,"id":"MTM"},"RmxvZ286OkJyYW5jaDo6MTQ3NzA1MDkwNzI4NQ":{"id":"RmxvZ286OkJyYW5jaDo6MTQ3NzA1MDkwNzI4NQ","type":2,"condition":"${A12.value}>0"},"MTQ":{"type":1,"activityType":"tibco-log","name":"Log Clear Alert","version":"0.0.1","title":"Log Message","description":"Simple Log Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/log","attributes":{"inputs":[{"name":"message","type":0,"value":"ALERT IS CLEARED"},{"name":"flowInfo","type":3,"value":"true"},{"name":"addToFlow","type":3,"value":"true"}],"outputs":[{"name":"message","type":0}]},"__schema":{"name":"tibco-log","version":"0.0.1","title":"Log Message","description":"Simple Log Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/log","inputs":[{"name":"message","type":"string","value":""},{"name":"flowInfo","type":"boolean","value":"true"},{"name":"addToFlow","type":"boolean","value":"true"}],"outputs":[{"name":"message","type":"string"}]},"author":"Anonymous","where":"file:///src/submodules/flogo-web/dist/submodules/flogo-contrib/activity/log","installed":true,"id":"MTQ"},"MTU":{"type":1,"activityType":"tibco-counter","name":"Reset Alert Counter","version":"0.0.1","title":"Counter Activity","description":"Simple Global Counter Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/counter","attributes":{"inputs":[{"name":"counterName","type":0,"required":true,"value":"alertsCount"},{"name":"increment","type":3,"value":false},{"name":"reset","type":3,"value":"true"}],"outputs":[{"name":"value","type":1}]},"__schema":{"name":"tibco-counter","version":"0.0.1","title":"Counter Activity","description":"Simple Global Counter Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/counter","inputs":[{"name":"counterName","type":"string","required":true},{"name":"increment","type":"boolean"},{"name":"reset","type":"boolean"}],"outputs":[{"name":"value","type":"integer"}]},"author":"Anonymous","where":"file:///Users/pdhar/dev/cloud/flogo-web/dist/submodules/flogo-contrib/activity/counter","installed":true,"id":"MTU"},"MTg":{"type":1,"activityType":"pushover","name":"PushOver Alert","version":"0.0.1","title":"PushOver Notification Activity","description":"Simple activity to send notifications to devices across PushOver Service","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity","attributes":{"inputs":[{"name":"userKey","type":0,"value":"[YOUR_KEY]"},{"name":"authToken","type":0,"value":"[YOUR_APP_TOKEN]"},{"name":"message","type":0,"value":"Careful ! Temperature is getting high ! :-("},{"name":"messageTitle","type":0,"value":""},{"name":"device","type":0,"value":""},{"name":"sound","type":0,"value":""},{"name":"url","type":0,"value":""},{"name":"urlTitle","type":0,"value":""},{"name":"priority","value":0}],"outputs":[{"name":"status","type":0}]},"__schema":{"name":"pushover","version":"0.0.1","title":"PushOver Notification Activity","description":"Simple activity to send notifications to devices across PushOver Service","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity","inputs":[{"name":"userKey","type":"string"},{"name":"authToken","type":"string"},{"name":"message","type":"string"},{"name":"messageTitle","type":"string"},{"name":"device","type":"string"},{"name":"sound","type":"string"},{"name":"url","type":"string"},{"name":"urlTitle","type":"string"},{"name":"priority","type":"int","value":0}],"outputs":[{"name":"status","type":"string"}]},"author":"Anonymous","where":"github.com/ecarlier-tibco/flogo/activity/pushover","installed":true,"id":"MTg"},"MTk":{"type":1,"activityType":"pushover","name":"PushOver Clear","version":"0.0.1","title":"PushOver Notification Activity","description":"Simple activity to send notifications to devices across PushOver Service","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity","attributes":{"inputs":[{"name":"userKey","type":0,"value":"[YOUR_KEY]"},{"name":"authToken","type":0,"value":"[YOUR_APP_TOKEN]"},{"name":"message","type":0,"value":"Temperature is back to normal. We are all good ! :-)"},{"name":"messageTitle","type":0,"value":""},{"name":"device","type":0,"value":""},{"name":"sound","type":0,"value":""},{"name":"url","type":0,"value":""},{"name":"urlTitle","type":0,"value":""},{"name":"priority","value":0}],"outputs":[{"name":"status","type":0}]},"__schema":{"name":"pushover","version":"0.0.1","title":"PushOver Notification Activity","description":"Simple activity to send notifications to devices across PushOver Service","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity","inputs":[{"name":"userKey","type":"string"},{"name":"authToken","type":"string"},{"name":"message","type":"string"},{"name":"messageTitle","type":"string"},{"name":"device","type":"string"},{"name":"sound","type":"string"},{"name":"url","type":"string"},{"name":"urlTitle","type":"string"},{"name":"priority","type":"int","value":0}],"outputs":[{"name":"status","type":"string"}]},"author":"Anonymous","where":"github.com/ecarlier-tibco/flogo/activity/pushover","installed":true,"id":"MTk"}},"$table":"flows","errorHandler":{"paths":{"root":{"is":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDMyMzI1NzI6OjYyMDk5OC4zNzU"},"nodes":{"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDMyMzI1NzI6OjYyMDk5OC4zNzU":{"id":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDMyMzI1NzI6OjYyMDk5OC4zNzU","taskID":"OA","type":10,"children":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDMyMzI1NzM6OjYyMDk5OC44MDU"],"parents":[],"__status":{"isSelected":false}},"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDMyMzI1NzM6OjYyMDk5OC44MDU":{"id":"RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDMyMzI1NzM6OjYyMDk5OC44MDU","taskID":"MTA","type":5,"children":[],"parents":["RmxvZ29GbG93RGlhZ3JhbU5vZGU6OjE0NzcwNDMyMzI1NzI6OjYyMDk5OC4zNzU"],"__status":{"isSelected":false}}}},"items":{"OA":{"id":"OA","type":0,"version":"","name":"On Error","description":"","title":"On Error","activityType":"","triggerType":"__error-trigger","attributes":{"outputs":[{"name":"activity","type":0,"title":"activity","value":""},{"name":"message","type":0,"title":"message","value":""},{"name":"data","type":7,"title":"data","value":""}]},"inputMappings":[],"outputMappings":[],"outputs":[{"name":"activity","type":0,"title":"activity","value":""},{"name":"message","type":0,"title":"message","value":""},{"name":"data","type":7,"title":"data","value":""}],"__props":{"errors":[]},"__status":{"hasRun":false,"isRunning":false}},"OQ":{"type":1,"activityType":"tibco-log","name":"Log Message","version":"0.0.1","title":"Log Message","description":"Simple Log Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/log","attributes":{"inputs":[{"name":"message","type":0,"value":""},{"name":"flowInfo","type":3,"value":"true"},{"name":"addToFlow","type":3,"value":"true"}],"outputs":[{"name":"message","type":0}]},"__schema":{"name":"tibco-log","version":"0.0.1","title":"Log Message","description":"Simple Log Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/log","inputs":[{"name":"message","type":"string","value":""},{"name":"flowInfo","type":"boolean","value":"true"},{"name":"addToFlow","type":"boolean","value":"true"}],"outputs":[{"name":"message","type":"string"}]},"author":"Anonymous","where":"file:///src/submodules/flogo-web/dist/submodules/flogo-contrib/activity/log","installed":true,"id":"OQ","__props":{"errors":[]},"__status":{}},"MTA":{"type":1,"activityType":"tibco-log","name":"Log Error","version":"0.0.1","title":"Log Message","description":"Simple Log Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/log","attributes":{"inputs":[{"name":"message","type":0,"value":""},{"name":"flowInfo","type":3,"value":"true"},{"name":"addToFlow","type":3,"value":"true"}],"outputs":[{"name":"message","type":0}]},"__schema":{"name":"tibco-log","version":"0.0.1","title":"Log Message","description":"Simple Log Activity","homepage":"https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/log","inputs":[{"name":"message","type":"string","value":""},{"name":"flowInfo","type":"boolean","value":"true"},{"name":"addToFlow","type":"boolean","value":"true"}],"outputs":[{"name":"message","type":"string"}]},"author":"Anonymous","where":"file:///src/submodules/flogo-web/dist/submodules/flogo-contrib/activity/log","installed":true,"id":"MTA","__props":{"warnings":[],"errors":[]},"inputMappings":[{"type":1,"mapTo":"message","value":"{E.message}"}],"__status":{"hasRun":false,"isRunning":false}}}}}
+{
+  "name": "Temperature Monitoring App",
+  "type": "flogo:app",
+  "version": "0.0.1",
+  "description": "",
+  "triggers": [
+    {
+      "name": "Timer",
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/timer",
+      "description": "Simple Timer trigger",
+      "settings": {},
+      "id": "timer",
+      "handlers": [
+        {
+          "settings": {
+            "repeating": "true",
+            "notImmediate": "false",
+            "startDate": "2017-09-04T08:23:11Z00:00",
+            "hours": "0",
+            "minutes": "0",
+            "seconds": "2"
+          },
+          "actionId": "temperature_monitoring_flow"
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "name": "Temperature Monitoring Flow",
+      "data": {
+        "flow": {
+          "type": 1,
+          "attributes": [],
+          "rootTask": {
+            "id": 1,
+            "type": 1,
+            "tasks": [
+              {
+                "id": 2,
+                "name": "Get Temperature",
+                "description": "Thru WebIOPI Web Service",
+                "type": 1,
+                "activityType": "github-com-tibco-software-flogo-contrib-activity-rest",
+                "activityRef": "github.com/TIBCOSoftware/flogo-contrib/activity/rest",
+                "attributes": [
+                  {
+                    "name": "method",
+                    "value": "GET",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "name": "uri",
+                    "value": "http://raspberrypi:8000/devices/temp/sensor/temperature/c",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "name": "pathParams",
+                    "value": null,
+                    "required": false,
+                    "type": "params"
+                  },
+                  {
+                    "name": "queryParams",
+                    "value": null,
+                    "required": false,
+                    "type": "params"
+                  },
+                  {
+                    "name": "content",
+                    "value": null,
+                    "required": false,
+                    "type": "any"
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "name": "Log Temperature",
+                "description": "Simple Log Activity",
+                "type": 1,
+                "activityType": "github-com-tibco-software-flogo-contrib-activity-log",
+                "activityRef": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+                "attributes": [
+                  {
+                    "name": "message",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "flowInfo",
+                    "value": "true",
+                    "required": false,
+                    "type": "boolean"
+                  },
+                  {
+                    "name": "addToFlow",
+                    "value": "true",
+                    "required": false,
+                    "type": "boolean"
+                  }
+                ],
+                "inputMappings": [
+                  {
+                    "type": 1,
+                    "value": "{A2.result}",
+                    "mapTo": "message"
+                  }
+                ]
+              },
+              {
+                "id": 4,
+                "name": "Increment Counter",
+                "description": "Simple Global Counter Activity",
+                "type": 1,
+                "activityType": "github-com-tibco-software-flogo-contrib-activity-counter",
+                "activityRef": "github.com/TIBCOSoftware/flogo-contrib/activity/counter",
+                "attributes": [
+                  {
+                    "name": "counterName",
+                    "value": "alertCount",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "name": "increment",
+                    "value": "true",
+                    "required": false,
+                    "type": "boolean"
+                  },
+                  {
+                    "name": "reset",
+                    "value": false,
+                    "required": false,
+                    "type": "boolean"
+                  }
+                ]
+              },
+              {
+                "id": 5,
+                "name": "Light ON LED",
+                "description": "Simple REST Activity",
+                "type": 1,
+                "activityType": "github-com-tibco-software-flogo-contrib-activity-rest",
+                "activityRef": "github.com/TIBCOSoftware/flogo-contrib/activity/rest",
+                "attributes": [
+                  {
+                    "name": "method",
+                    "value": "POST",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "name": "uri",
+                    "value": "http://raspberrypi:8000/GPIO/23/value/1",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "name": "pathParams",
+                    "value": null,
+                    "required": false,
+                    "type": "params"
+                  },
+                  {
+                    "name": "queryParams",
+                    "value": null,
+                    "required": false,
+                    "type": "params"
+                  },
+                  {
+                    "name": "content",
+                    "value": null,
+                    "required": false,
+                    "type": "any"
+                  }
+                ]
+              },
+              {
+                "id": 6,
+                "name": "PushOver Notification Activity",
+                "description": "Simple activity to send notifications to devices across PushOver Service",
+                "type": 1,
+                "activityType": "github-com-ecarlier-tibco-flogo-activity-pushover",
+                "activityRef": "github.com/ecarlier-tibco/flogo/activity/pushover",
+                "attributes": [
+                  {
+                    "name": "userKey",
+                    "value": "[YOUR_USER_KEY]",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "name": "authToken",
+                    "value": "[YOUR_APP_KEY]",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "name": "message",
+                    "value": "Careful ! Temperature is getting high ! :-(",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "messageTitle",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "device",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "sound",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "url",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "urlTitle",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "priority",
+                    "value": 0,
+                    "required": false,
+                    "type": "integer"
+                  }
+                ]
+              },
+              {
+                "id": 7,
+                "name": "Read Counter",
+                "description": "Simple Global Counter Activity",
+                "type": 1,
+                "activityType": "github-com-tibco-software-flogo-contrib-activity-counter",
+                "activityRef": "github.com/TIBCOSoftware/flogo-contrib/activity/counter",
+                "attributes": [
+                  {
+                    "name": "counterName",
+                    "value": "alertCount",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "name": "increment",
+                    "value": false,
+                    "required": false,
+                    "type": "boolean"
+                  },
+                  {
+                    "name": "reset",
+                    "value": false,
+                    "required": false,
+                    "type": "boolean"
+                  }
+                ]
+              },
+              {
+                "id": 8,
+                "name": "Light OFF LED",
+                "description": "Simple REST Activity",
+                "type": 1,
+                "activityType": "github-com-tibco-software-flogo-contrib-activity-rest",
+                "activityRef": "github.com/TIBCOSoftware/flogo-contrib/activity/rest",
+                "attributes": [
+                  {
+                    "name": "method",
+                    "value": "POST",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "name": "uri",
+                    "value": "http://raspberrypi:8000/GPIO/23/value/0",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "name": "pathParams",
+                    "value": null,
+                    "required": false,
+                    "type": "params"
+                  },
+                  {
+                    "name": "queryParams",
+                    "value": null,
+                    "required": false,
+                    "type": "params"
+                  },
+                  {
+                    "name": "content",
+                    "value": null,
+                    "required": false,
+                    "type": "any"
+                  }
+                ]
+              },
+              {
+                "id": 9,
+                "name": "PushOver Notification Activity (2)",
+                "description": "Simple activity to send notifications to devices across PushOver Service",
+                "type": 1,
+                "activityType": "github-com-ecarlier-tibco-flogo-activity-pushover",
+                "activityRef": "github.com/ecarlier-tibco/flogo/activity/pushover",
+                "attributes": [
+                  {
+                    "name": "userKey",
+                    "value": "[YOUR_USER_KEY]",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "name": "authToken",
+                    "value": "[YOUR_APP_KEY]",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "name": "message",
+                    "value": "Temperature is back to normal. We are all good ! :-)",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "messageTitle",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "device",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "sound",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "url",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "urlTitle",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "priority",
+                    "value": 0,
+                    "required": false,
+                    "type": "integer"
+                  }
+                ]
+              },
+              {
+                "id": 10,
+                "name": "Reset Counter",
+                "description": "Simple Global Counter Activity",
+                "type": 1,
+                "activityType": "github-com-tibco-software-flogo-contrib-activity-counter",
+                "activityRef": "github.com/TIBCOSoftware/flogo-contrib/activity/counter",
+                "attributes": [
+                  {
+                    "name": "counterName",
+                    "value": "alertCount",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "name": "increment",
+                    "value": false,
+                    "required": false,
+                    "type": "boolean"
+                  },
+                  {
+                    "name": "reset",
+                    "value": "true",
+                    "required": false,
+                    "type": "boolean"
+                  }
+                ]
+              }
+            ],
+            "links": [
+              {
+                "id": 1,
+                "from": 2,
+                "to": 3,
+                "type": 0
+              },
+              {
+                "id": 2,
+                "from": 3,
+                "to": 4,
+                "type": 1,
+                "value": "${A2.result} >= 27"
+              },
+              {
+                "id": 3,
+                "from": 4,
+                "to": 5,
+                "type": 1,
+                "value": "${A4.value} == 1"
+              },
+              {
+                "id": 4,
+                "from": 5,
+                "to": 6,
+                "type": 0
+              },
+              {
+                "id": 5,
+                "from": 3,
+                "to": 7,
+                "type": 1,
+                "value": "${A2.result} < 27"
+              },
+              {
+                "id": 6,
+                "from": 7,
+                "to": 8,
+                "type": 1,
+                "value": "${A7.value} > 0"
+              },
+              {
+                "id": 7,
+                "from": 8,
+                "to": 9,
+                "type": 0
+              },
+              {
+                "id": 8,
+                "from": 9,
+                "to": 10,
+                "type": 0
+              }
+            ],
+            "attributes": []
+          }
+        }
+      },
+      "id": "temperature_monitoring_flow",
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow"
+    }
+  ]
+}
