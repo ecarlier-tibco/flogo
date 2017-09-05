@@ -4,6 +4,10 @@ This application monitors the temperature using a DS18B20 temperature sensor con
 * When the temperature goes above some defined thershold (defined as condition on a flow connector), the application lights on a LED (connected to GPIO 23) and sends a notification through PushOver Service
 * When the temperature goes back below the threshold, the appplication lights off the LED and sends a clear notification through PushOver Service
 
+## Important Note
+The CLI flow may not work as it has been checked recently and some changes happened in Flogo
+Flogo web flow has been updated and now works
+
 ## Pre-requisites
 
 ### Hardware
