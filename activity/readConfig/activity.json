@@ -1,0 +1,19 @@
+{
+  "name": "readConfig",
+  "version": "0.0.1",
+  "type": "flogo:activity",
+  "description": "Read a configuration file and stores config params and values as global parameters",
+  "author": "Eric Carlier <ecarlier@tibco.com>",
+  "inputs":[
+    {
+      "name": "configFile",
+      "type": "string"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "string"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+    "Config": {
+        "Parameters": [
+            {
+                "Name" : "Param1",
+                "Value": "Value1"
+            },
+            {
+                "Name" : "Param2",
+                "Value": "Value2"
+            }
+        ]
+    }
+}
