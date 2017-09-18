@@ -96,7 +96,11 @@ func (t *TimerTrigger) scheduleOnce(endpoint *trigger.HandlerConfig) {
 
 	seconds := getInitialStartInSeconds(endpoint)
 	log.Debug("Seconds till trigger fires: ", seconds)
-	timerJob := scheduler.Every(int(seconds))
+	period := seconds
+	if period == 0 {
+		period = 1
+	}
+	timerJob := scheduler.Every(int(period))
 
 	if timerJob == nil {
 		log.Error("timerJob is nil")
@@ -116,12 +120,20 @@ func (t *TimerTrigger) scheduleOnce(endpoint *trigger.HandlerConfig) {
 		timerJob.Quit <- true
 	}
 
-	timerJob, err := timerJob.Seconds().NotImmediately().Run(fn)
-	if err != nil {
-		log.Error("Error scheduleOnce flo err: ", err.Error())
+	if seconds == 0 {
+		timerJob, err := timerJob.Seconds().Run(fn)
+		if err != nil {
+			log.Error("Error scheduleOnce flo err: ", err.Error())
+		}
+		t.timers[endpoint.ActionId] = timerJob
+	} else {
+		timerJob, err := timerJob.Seconds().NotImmediately().Run(fn)
+		if err != nil {
+			log.Error("Error scheduleOnce flo err: ", err.Error())
+		}
+		t.timers[endpoint.ActionId] = timerJob
 	}
 
-	t.timers[endpoint.ActionId] = timerJob
 }
 
 func (t *TimerTrigger) scheduleRepeating(endpoint *trigger.HandlerConfig) {
