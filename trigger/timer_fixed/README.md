@@ -4,7 +4,7 @@ This trigger provides your flogo application the ability to schedule a flow via 
 ## Installation
 
 ```bash
-flogo add trigger github.com/TIBCOSoftware/flogo-contrib/trigger/timer
+flogo add trigger github.com/ecarlier-tibco/flogo/trigger/erctimer
 ```
 
 ## Schema

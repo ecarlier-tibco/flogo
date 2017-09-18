@@ -1,11 +1,11 @@
 {
   "name": "erctimer",
   "type": "flogo:trigger",
-  "ref": "github.com/ecarlier-tibco/flogo/trigger/timer_fixed",
+  "ref": "github.com/ecarlier-tibco/flogo/trigger/erctimer",
   "version": "0.0.1",
   "title": "Fixed Timer Modified by ecarlier",
   "description": "Simple Timer trigger",
-  "homepage": "https://github.com/ecarlier-tibco/flogo/tree/master/trigger/timer-fixed",
+  "homepage": "https://github.com/ecarlier-tibco/flogo/tree/master/trigger/erctimer",
   "settings": [
   ],
   "outputs": [
