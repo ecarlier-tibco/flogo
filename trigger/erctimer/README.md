@@ -1,6 +1,8 @@
 # erc-timer
 This trigger provides your flogo application the ability to schedule a flow via scheduling service
 
+ONLY DIFFERENCE with flogo-contrib timer : You can set startDate with "NOW" to trigger timer immediately
+
 ## Installation
 
 ```bash
