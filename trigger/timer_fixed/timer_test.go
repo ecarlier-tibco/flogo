@@ -1,4 +1,4 @@
-package erc-timer
+package erctimer
 
 import (
 	"context"

@@ -1,4 +1,4 @@
-package erc-timer
+package erctimer
 
 import (
 	"context"
@@ -168,14 +168,13 @@ func (t *TimerTrigger) scheduleRepeating(endpoint *trigger.HandlerConfig) {
 
 func getInitialStartInSeconds(handlerCfg *trigger.HandlerConfig) int {
 
-
 	if _, ok := handlerCfg.Settings["startDate"]; !ok {
 		return 0
 	}
 
 	layout := time.RFC3339
 	startDate := handlerCfg.GetSetting("startDate")
-	if (startDate == "NOW") {
+	if startDate == "NOW" {
 		return 0
 	}
 	idx := strings.LastIndex(startDate, "Z")
