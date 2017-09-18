@@ -1,5 +1,5 @@
 {
-  "name": "erc-timer",
+  "name": "erctimer",
   "type": "flogo:trigger",
   "ref": "github.com/ecarlier-tibco/flogo/trigger/timer_fixed",
   "version": "0.0.1",
