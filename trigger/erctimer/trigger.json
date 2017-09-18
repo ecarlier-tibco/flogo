@@ -1,0 +1,55 @@
+{
+  "name": "erctimer",
+  "type": "flogo:trigger",
+  "ref": "github.com/ecarlier-tibco/flogo/trigger/timer_fixed",
+  "version": "0.0.1",
+  "title": "Fixed Timer Modified by ecarlier",
+  "description": "Simple Timer trigger",
+  "homepage": "https://github.com/ecarlier-tibco/flogo/tree/master/trigger/timer-fixed",
+  "settings": [
+  ],
+  "outputs": [
+    {
+      "name": "params",
+      "type": "params"
+    },
+    {
+      "name": "content",
+      "type": "object"
+    }
+  ],
+  "handler": {
+    "settings": [
+      {
+        "name": "repeating",
+        "type": "string",
+        "required" : true
+      },
+      {
+        "name": "notImmediate",
+        "type": "string",
+        "required" : false
+      },
+      {
+        "name": "startDate",
+        "type": "string",
+        "required" : false
+      },
+      {
+        "name": "hours",
+        "type": "string",
+        "required" : false
+      },
+      {
+        "name": "minutes",
+        "type": "string",
+        "required" : false
+      },
+      {
+        "name": "seconds",
+        "type": "string",
+        "required" : false
+      }
+    ]
+  }
+}
