@@ -60,11 +60,10 @@ func TestEval(t *testing.T) {
 
 	dt, _ := data.ToTypeEnum("string")
 	data.GetGlobalScope().AddAttr("DeviceID", dt, "DEV_GOTEST")
-	data.GetGlobalScope().AddAttr("DeviceLatitude", dt, "48.875621")
-	data.GetGlobalScope().AddAttr("DeviceLongitude", dt, "2.302543")
+	dt, _ = data.ToTypeEnum("number")
+	data.GetGlobalScope().AddAttr("DeviceLatitude", dt, 48.875621)
+	data.GetGlobalScope().AddAttr("DeviceLongitude", dt, 2.302543)
 
-	tc.SetInput("latitude", "48.875593")
-	tc.SetInput("longitude", "2.302564")
 	_, err := act.Eval(tc)
 	assert.Nil(t, err)
 	result := tc.GetOutput("result")

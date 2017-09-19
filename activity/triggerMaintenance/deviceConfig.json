@@ -3,15 +3,18 @@
         "Parameters": [
             {
                 "Name" : "DeviceID",
+                "Type" : "string",
                 "Value": "DEV01"
             },
             {
                 "Name" : "DeviceLatitude",
-                "Value": "48.875621"
+                "Type" : "number",
+                "Value": 48.875621
             },
 	    {
                 "Name" : "DeviceLongitude",
-                "Value": "2.302543"
+                "Type" : "number",
+                "Value": 2.302543
             }
         ]
     }

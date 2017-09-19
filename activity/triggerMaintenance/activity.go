@@ -13,7 +13,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"strconv"
+	"strings"
 
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
 	"github.com/TIBCOSoftware/flogo-lib/core/data"
@@ -87,6 +87,7 @@ func (a *TriggerMaintenanceActivity) Eval(context activity.Context) (done bool, 
 	if username == "" {
 		return false, activity.NewError("Live Apps connection user name is not configured", "LIVEAPPS-CON-2000", nil)
 	}
+	username = strings.Replace(username, "(at)", "@", 1)
 	password = context.GetInput(passwordParam).(string)
 	if password == "" {
 		return false, activity.NewError("Live Apps connection password is not configured", "LIVEAPPS-CON-2000", nil)
@@ -125,11 +126,7 @@ func (a *TriggerMaintenanceActivity) Eval(context activity.Context) (done bool, 
 		activityLog.Error(errorMsg)
 		return false, activity.NewError(errorMsg, "", nil)
 	}
-	latitudeStr := typedVal.Value.(string)
-	latitude, err := strconv.ParseFloat(latitudeStr, 64)
-	if err != nil {
-		return false, activity.NewError("Config Param Device Latitude is not a proper number", "LIVEAPPS-NUMBER-3000", nil)
-	}
+	latitude := typedVal.Value.(float64)
 
 	typedVal, ok = data.GetGlobalScope().GetAttr(longitudeConfigParam)
 	if !ok {
@@ -137,11 +134,7 @@ func (a *TriggerMaintenanceActivity) Eval(context activity.Context) (done bool, 
 		activityLog.Error(errorMsg)
 		return false, activity.NewError(errorMsg, "", nil)
 	}
-	longitudeStr := typedVal.Value.(string)
-	longitude, err := strconv.ParseFloat(longitudeStr, 64)
-	if err != nil {
-		return false, activity.NewError("onfig Param Device Longitude is not a proper number", "LIVEAPPS-NUMBER-3000", nil)
-	}
+	longitude := typedVal.Value.(float64)
 
 	alert, _ := context.GetInput(alertParam).(string)
 
