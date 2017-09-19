@@ -29,7 +29,7 @@ type ConfigType struct {
 type ParameterType struct {
 	Name  string
 	Type  string
-	Value string
+	Value interface{}
 }
 
 // MyActivity is a stub for your Activity implementation
@@ -67,9 +67,12 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 		return false, activity.NewError(errorMsg, "", nil)
 	}
 	for _, param := range jsonconfig.Config.Parameters {
-		dt, _ := data.ToTypeEnum("string")
-		data.GetGlobalScope().AddAttr(param.Name, dt, param.Value)
-		log.Infof("Config Parameter %s is set with value %s", param.Name, param.Value)
+		dt, ok := data.ToTypeEnum(param.Type)
+		if ok {
+			data.GetGlobalScope().AddAttr(param.Name, dt, param.Value)
+		} else {
+			log.Errorf("Wrong type %s specified for Config Parameter %s", param.Type, param.Name)
+		}
 	}
 
 	context.SetOutput(ovResult, "ok")

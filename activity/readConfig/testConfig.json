@@ -2,12 +2,24 @@
     "Config": {
         "Parameters": [
             {
-                "Name" : "Param1",
-                "Value": "Value1"
+                "Name" : "ParamStr",
+                "Type" : "string",
+                "Value": "ValueStr"
             },
             {
-                "Name" : "Param2",
-                "Value": "Value2"
+                "Name" : "ParamInt",
+                "Type" : "integer",
+                "Value": 22
+            },
+            {
+                "Name" : "ParamNumber",
+                "Type" : "number",
+                "Value": 23.897
+            },
+            {
+                "Name" : "ParamBool",
+                "Type" : "boolean",
+                "Value": true
             }
         ]
     }

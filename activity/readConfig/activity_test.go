@@ -57,11 +57,21 @@ func TestEval(t *testing.T) {
 	//check result attr
 	value, _ := tc.GetOutput(ovResult).(string)
 	assert.Equal(t, "ok", value, "Bad Result")
-	typedVal, ok := data.GetGlobalScope().GetAttr("Param1")
-	assert.True(t, ok, "Get Global Scope Failed")
-	assert.Equal(t, typedVal.Value, "Value1", "Wrong value")
-	typedVal, ok = data.GetGlobalScope().GetAttr("Param2")
-	assert.True(t, ok, "Get Global Scope Failed")
-	assert.Equal(t, typedVal.Value, "Value2", "Wrong value")
+
+	typedVal, ok := data.GetGlobalScope().GetAttr("ParamStr")
+	assert.True(t, ok, "Get Global Scope on string parameter Failed")
+	assert.Equal(t, "ValueStr", typedVal.Value, "Wrong value for string parameter")
+
+	typedVal, ok = data.GetGlobalScope().GetAttr("ParamInt")
+	assert.True(t, ok, "Get Global Scope on integer parameter Failed")
+	assert.Equal(t, 22.0, typedVal.Value, "Wrong value for integer parameter")
+
+	typedVal, ok = data.GetGlobalScope().GetAttr("ParamNumber")
+	assert.True(t, ok, "Get Global Scope on number parameter Failed")
+	assert.Equal(t, 23.897, typedVal.Value.(float64), "Wrong value for number parameter")
+
+	typedVal, ok = data.GetGlobalScope().GetAttr("ParamBool")
+	assert.True(t, ok, "Get Global Scope on number parameter Failed")
+	assert.True(t, typedVal.Value.(bool), "Wrong value for boolean parameter")
 
 }
