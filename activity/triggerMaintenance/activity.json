@@ -1,0 +1,63 @@
+{
+    "name": "triggerMaintenace",
+    "version": "1.0.0",
+    "title": "Trigger Maintenance Case on Live Apps",
+    "author": "Eric Carlier <ecarlier@tibco.com>",
+    "type": "flogo:activity",
+    "ref": "github.com/ecarlier-tibco/flogo/activity/triggerMaintenance",
+    "description": "Invokes Live Apps through REST API to  create a Maintenance case passing configured device id, long and lat",
+    "homepage": "https://github.com/ecarlier-tibco/flogo/tree/master/activity/triggerMaintenance",  
+    "inputs": [
+           {
+            "name": "username",
+            "type": "string",
+            "required": true
+           },
+           {
+            "name": "password",
+            "type": "string",
+            "required": true
+           },
+           {
+            "name": "region",
+            "type": "string",
+            "required": true
+           },
+           {
+            "name": "accountID",
+            "type": "string",
+            "required": true
+           },
+           {
+            "name": "sandboxID",
+            "type": "string",
+            "required": true
+           },
+           {
+            "name": "applicationID",
+            "type": "integer",
+            "required": true
+           },
+           {
+            "name": "applicationCreatorID",
+            "type": "integer",
+            "required": true
+           },
+           {
+            "name": "applicationVersion",
+            "type": "integer",
+            "required": true
+           },
+           {
+            "name": "alert",
+            "type": "string",
+            "required": true
+           }
+    ],
+    "outputs": [
+           {
+            "name": "result",
+            "type": "string"
+          }
+    ]
+}

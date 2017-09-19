@@ -1,0 +1,18 @@
+{
+    "Config": {
+        "Parameters": [
+            {
+                "Name" : "DeviceID",
+                "Value": "DEV01"
+            },
+            {
+                "Name" : "DeviceLatitude",
+                "Value": "48.875621"
+            },
+	    {
+                "Name" : "DeviceLongitude",
+                "Value": "2.302543"
+            }
+        ]
+    }
+}
