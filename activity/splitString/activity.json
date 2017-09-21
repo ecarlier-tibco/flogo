@@ -1,0 +1,33 @@
+{
+  "name": "splitString",
+  "version": "0.0.1",
+  "type": "flogo:activity",
+  "ref": "github.com/ecarlier-tibco/flogo/activity/splitString",
+  "title": "Get Token from a split string",
+  "description": "Split an input string given the delimiter and returns the requested token number (starting at 1)",
+  "author": "Eric Carlier <ecarlier@tibco.com>",
+  "homepage": "https://github.com/ecarlier-tibco/flogo/tree/master/activity/splitString",
+  "inputs":[
+    {
+      "name": "stringToSplit",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "delimiter",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "tokenNumber",
+      "type": "integer",
+      "required": true
+    }
+  ],
+  "outputs": [
+    {
+      "name": "token",
+      "type": "string"
+    }
+  ]
+}
