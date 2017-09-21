@@ -11,10 +11,20 @@
                 "Type" : "number",
                 "Value": 48.875621
             },
-	    {
+	        {
                 "Name" : "DeviceLongitude",
                 "Type" : "number",
                 "Value": 2.302543
+            },
+            {
+                "Name" : "TEMP_THRESHOLD",
+                "Type" : "number",
+                "Value": 27.0
+            },
+            {
+                "Name" : "ALERT_STATE",
+                "Type" : "string",
+                "Value": "OFF"
             }
         ]
     }
