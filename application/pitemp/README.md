@@ -1,7 +1,7 @@
 # Temperature Monitoring FLOGO Application for Raspberry PI
 
-This application monitors the temperature using a DS18B20 temperature sensor connected to a Raspeberry Pi through GPIO. 
-* When the temperature goes above some defined thershold (defined as condition on a flow connector), the application lights on a LED (connected to GPIO 23) and sends a notification through PushOver Service
+This application monitors the temperature using a DS18B20 temperature sensor connected to a Raspberry Pi through GPIO. 
+* When the temperature goes above some defined threshold (defined as condition on a flow connector), the application lights on a LED (connected to GPIO 23) and sends a notification through PushOver Service
 * When the temperature goes back below the threshold, the appplication lights off the LED and sends a clear notification through PushOver Service
 
 ## Important Note
@@ -31,5 +31,5 @@ Flogo web flow has been updated and now works
 sudo webiopi -d -c /etc/webiopi/config
 ```
 ## Configuring, Compiling and Running the application:
-* the cli sub-directory contains files and information  to setup and run the application with flogo-cli
+* the cli sub-directory contains files and information  to setup and run the application with flogo-cli **(requires updates to work!)**
 * the web sub-directory contains files and information  to setup and run the application with flogo-web
