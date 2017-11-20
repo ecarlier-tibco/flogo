@@ -5,7 +5,8 @@
   "description": "Syslog Trigger",
   "author": "Eric Carlier <ecarlier@tibco.com>",
   "title": "Syslogs Trigger",
-  "homepage": "https://github.com/ecarlier-tibco/flogo/trigger/syslogs",
+  "ref": "github.com/ecarlier-tibco/flogo/trigger/syslogs",
+  "homepage": "https://github.com/ecarlier-tibco/flogo/tree/master/trigger/syslogs",
   
   "settings":[
     {
