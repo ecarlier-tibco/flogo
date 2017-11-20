@@ -1,9 +1,12 @@
 {
-  "name": "syslogs",
+  "name": "ecarlier-syslogs",
   "version": "0.0.1",
   "type": "flogo:trigger",
-  "description": "trigger description",
-  "author": "Your Name <you.name@example.org>",
+  "description": "Syslog Trigger",
+  "author": "Eric Carlier <ecarlier@tibco.com>",
+  "title": "Syslogs Trigger",
+  "homepage": "https://github.com/ecarlier-tibco/flogo/trigger/syslogs",
+  
   "settings":[
     {
       "name": "port",
