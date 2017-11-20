@@ -1,0 +1,86 @@
+{
+  "name": "syslogs",
+  "version": "0.0.1",
+  "type": "flogo:trigger",
+  "description": "trigger description",
+  "author": "Your Name <you.name@example.org>",
+  "settings":[
+    {
+      "name": "port",
+      "type": "integer",
+      "value": "514"
+    },
+    {
+      "name": "UDP",
+      "type": "boolean",
+      "value": "true"
+    },
+    {
+      "name": "TCP",
+      "type": "boolean",
+      "value": "false"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "content",
+      "type": "string"
+    },
+    {
+      "name": "tag",
+      "type": "string"
+    },
+    {
+      "name": "priority",
+      "type": "integer"
+    },
+    {
+      "name": "severity",
+      "type": "integer"
+    },
+    {
+      "name": "hostname",
+      "type": "string"
+    },
+    {
+      "name": "message",
+      "type": "string"
+    },
+    {
+      "name": "facility",
+      "type": "integer"
+    },
+    {
+      "name": "version",
+      "type": "integer"
+    },
+    {
+      "name": "timestamp",
+      "type": "string"
+    },
+    {
+      "name": "app_name",
+      "type": "string"
+    },
+    {
+      "name": "proc_id",
+      "type": "string"
+    },
+    {
+      "name": "msg_id",
+      "type": "string"
+    },
+    {
+      "name": "client",
+      "type": "string"
+    },
+    {
+      "name": "tls_peer",
+      "type": "string"
+    }
+  ],
+  "handler": {
+    "settings": [ 
+    ]
+  }
+}
