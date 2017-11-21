@@ -1,7 +1,6 @@
 package syslogs
 
 import (
-	"context"
 	"fmt"
 	"strconv"
 	"time"
@@ -99,6 +98,7 @@ func (t *MyTrigger) Start() error {
 		handler := new(MySyslogHandler)
 		handler.t = t
 		handler.ActionID = handlerCfg.ActionId
+		handler.handlerCfg = handlerCfg
 		server.SetHandler(handler)
 	}
 
@@ -125,8 +125,9 @@ func (t *MyTrigger) Stop() error {
 
 // MySyslogHandler : My trigger's syslogs handler
 type MySyslogHandler struct {
-	t        *MyTrigger
-	ActionID string
+	t          *MyTrigger
+	ActionID   string
+	handlerCfg *trigger.HandlerConfig
 }
 
 // Handle : processing of each received syslogs
@@ -162,7 +163,8 @@ func (s *MySyslogHandler) Handle(logParts format.LogParts, msgLen int64, err err
 		log.Errorf("Failed to create output attributes for syslogs message for ActionID [%s] for reason [%s] message lost", s.ActionID, errorAttrs)
 	}
 
-	ctx := trigger.NewContext(context.Background(), startAttrs)
+	ctx := trigger.NewInitialContext(startAttrs, s.handlerCfg)
+
 	action := action.Get(s.ActionID)
 	_, _, errRun := s.t.runner.Run(ctx, action, s.ActionID, nil)
 
