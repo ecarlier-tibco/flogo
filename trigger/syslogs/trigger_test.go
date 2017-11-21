@@ -11,7 +11,6 @@ import (
 
 	"github.com/TIBCOSoftware/flogo-lib/core/action"
 	"github.com/TIBCOSoftware/flogo-lib/core/trigger"
-	"github.com/davecgh/go-spew/spew"
 )
 
 // var exampleRFC5424Syslog = "<34>1 2003-10-11T22:14:15.003Z mymachine.example.com su - ID47 - 'su root' failed for lonvick on /dev/pts/8"
@@ -32,8 +31,7 @@ type TestRunner struct {
 // Run implements action.Runner.Run
 func (tr *TestRunner) Run(context context.Context, action action.Action, uri string, options interface{}) (code int, data interface{}, err error) {
 	fmt.Println("TestRunner")
-	fmt.Printf("URI: [%s]", uri)
-	spew.Dump(context)
+	fmt.Printf("URI: [%s]\n", uri)
 
 	return 0, nil, nil
 }
@@ -79,6 +77,7 @@ func TestInit(t *testing.T) {
 	}()
 
 	time.Sleep(time.Second * 1)
+
 	ServerAddr, err := net.ResolveUDPAddr("udp", "127.0.0.1:11514")
 	CheckError(err)
 

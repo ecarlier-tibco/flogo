@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/TIBCOSoftware/flogo-lib/core/action"
 	"github.com/TIBCOSoftware/flogo-lib/core/trigger"
@@ -135,16 +136,28 @@ func (s *MySyslogHandler) Handle(logParts format.LogParts, msgLen int64, err err
 		log.Errorf("Syslogs Handler for ActionID [%s] received error [%s]", s.ActionID, err)
 	}
 
+	//TODO how to handle reply to, reply feature
+	req := &StartRequest{}
 	data := make(map[string]interface{})
-	/*
-		for key, value := range logParts {
-			fmt.Println("Key:", key, "Value:", value)
+	for key, value := range logParts {
+		if key != "timestamp" {
 			data[key] = value
+		} else {
+			ts, ok := value.(time.Time)
+			if ok {
+				data[key] = ts.Format(time.RFC3339)
+			}
 		}
-	*/
+	}
+	req.Data = data
 
 	md := s.t.Metadata()
-	startAttrs, errorAttrs := md.OutputsToAttrs(data, false)
+	startAttrs, errorAttrs := md.OutputsToAttrs(req.Data, false)
+	/*
+		for _, attr := range startAttrs {
+			spew.Dump(&attr)
+		}
+	*/
 	if errorAttrs != nil || startAttrs == nil {
 		log.Errorf("Failed to create output attributes for syslogs message for ActionID [%s] for reason [%s] message lost", s.ActionID, errorAttrs)
 	}
@@ -156,4 +169,11 @@ func (s *MySyslogHandler) Handle(logParts format.LogParts, msgLen int64, err err
 	if errRun != nil {
 		log.Errorf("Failed to process syslogs message for ActionID [%s] for reason [%s] message lost", s.ActionID, errRun)
 	}
+}
+
+// StartRequest describes a request for starting a ProcessInstance
+type StartRequest struct {
+	ProcessURI string                 `json:"flowUri"`
+	Data       map[string]interface{} `json:"data"`
+	ReplyTo    string                 `json:"replyTo"`
 }
