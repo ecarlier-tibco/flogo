@@ -8,7 +8,6 @@ import (
 	"github.com/TIBCOSoftware/flogo-lib/core/action"
 	"github.com/TIBCOSoftware/flogo-lib/core/trigger"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
-	"github.com/davecgh/go-spew/spew"
 	syslog "gopkg.in/mcuadros/go-syslog.v2"
 	"gopkg.in/mcuadros/go-syslog.v2/format"
 )
@@ -138,6 +137,7 @@ func (s *MySyslogHandler) Handle(logParts format.LogParts, msgLen int64, err err
 		log.Errorf("Syslogs Handler for ActionID [%s] received error [%s]", s.ActionID, err)
 	}
 
+	log.Debug("New syslogs message received")
 	//TODO how to handle reply to, reply feature
 	req := &StartRequest{}
 	data := make(map[string]interface{})
@@ -150,30 +150,27 @@ func (s *MySyslogHandler) Handle(logParts format.LogParts, msgLen int64, err err
 				data[key] = ts.Format(time.RFC3339)
 			}
 		}
+		log.Debugf("Syslogs Message Field [%s] -> Value [%v]", key, data[key])
 	}
 	req.Data = data
 
 	md := s.t.Metadata()
 	startAttrs, errorAttrs := md.OutputsToAttrs(req.Data, false)
-	/*
-		for _, attr := range startAttrs {
-			spew.Dump(&attr)
-		}
-	*/
+
 	if errorAttrs != nil || startAttrs == nil {
 		log.Errorf("Failed to create output attributes for syslogs message for ActionID [%s] for reason [%s] message lost", s.ActionID, errorAttrs)
 	}
 
 	ctx := trigger.NewInitialContext(startAttrs, s.handlerCfg)
 
-	spew.Dump(action.Actions())
 	action := action.Get(s.ActionID)
-	fmt.Println(s.ActionID)
 
 	_, errRun := s.t.runner.RunAction(ctx, action, nil)
 
 	if errRun != nil {
 		log.Errorf("Failed to process syslogs message for ActionID [%s] for reason [%s] message lost", s.ActionID, errRun)
+	} else {
+		log.Debugf("Syslogs Trigger Started Action [%s]", s.ActionID)
 	}
 }
 
