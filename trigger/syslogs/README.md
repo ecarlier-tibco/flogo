@@ -112,3 +112,133 @@ _(In DEBUG mode, the trigger will log fields actually received for each event)_
   ]
 }
 ```
+## Trigger Expected Action Results
+
+There are no expected results back from the action to the syslogs trigger
+
+## Example Application File using Syslogs Trigger
+
+This application integrate the syslogs trigger and maps 3 fields issued by the trigger into the flow : (priority, severity, content) which are mapped into flow parameters (priority, severity, syslogmsg)
+
+The Flow itself just has one activity logging flow parameter (syslogmsg)
+
+```json
+{
+  "name": "syslogsApp",
+  "type": "flogo:app",
+  "version": "0.0.1",
+  "description": "",
+  "triggers": [
+    {
+      "name": "Syslogs Trigger",
+      "ref": "github.com/ecarlier-tibco/flogo/trigger/syslogs",
+      "description": "Syslog Trigger",
+      "settings": {
+        "port": "11514",
+        "UDP": "true",
+        "TCP": "false"
+      },
+      "id": "syslogs_trigger",
+      "handlers": [
+        {
+          "actionMappings": {
+            "input": [
+              {
+                "type": 1,
+                "mapTo": "priority",
+                "value": "priority"
+              },
+              {
+                "type": 1,
+                "mapTo": "severity",
+                "value": "severity"
+              },
+              {
+                "type": 1,
+                "mapTo": "syslogmsg",
+                "value": "content"
+              }
+            ],
+            "output": []
+          },
+          "settings": {},
+          "actionId": "syslogs_flow"
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "metadata": {
+        "input": [
+          {
+            "name": "syslogmsg",
+            "type": "string"
+          },
+          {
+            "name": "priority",
+            "type": "integer"
+          },
+          {
+            "name": "severity",
+            "type": "integer"
+          }
+        ],
+        "output": []
+      },
+      "data": {
+        "flow": {
+          "name": "syslogs flow",
+          "type": 1,
+          "attributes": [],
+          "rootTask": {
+            "id": 1,
+            "type": 1,
+            "tasks": [
+              {
+                "id": "log_2",
+                "name": "Log Message",
+                "description": "Simple Log Activity",
+                "type": 1,
+                "activityType": "github-com-tibco-software-flogo-contrib-activity-log",
+                "activityRef": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+                "attributes": [
+                  {
+                    "name": "message",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "flowInfo",
+                    "value": "false",
+                    "required": false,
+                    "type": "boolean"
+                  },
+                  {
+                    "name": "addToFlow",
+                    "value": "false",
+                    "required": false,
+                    "type": "boolean"
+                  }
+                ],
+                "inputMappings": [
+                  {
+                    "type": 1,
+                    "value": "$flow.syslogmsg",
+                    "mapTo": "message"
+                  }
+                ]
+              }
+            ],
+            "links": [],
+            "attributes": []
+          }
+        }
+      },
+      "id": "syslogs_flow",
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow"
+    }
+  ]
+}
+```
