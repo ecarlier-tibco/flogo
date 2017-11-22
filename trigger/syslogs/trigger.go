@@ -8,6 +8,7 @@ import (
 	"github.com/TIBCOSoftware/flogo-lib/core/action"
 	"github.com/TIBCOSoftware/flogo-lib/core/trigger"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
+	"github.com/davecgh/go-spew/spew"
 	syslog "gopkg.in/mcuadros/go-syslog.v2"
 	"gopkg.in/mcuadros/go-syslog.v2/format"
 )
@@ -165,8 +166,11 @@ func (s *MySyslogHandler) Handle(logParts format.LogParts, msgLen int64, err err
 
 	ctx := trigger.NewInitialContext(startAttrs, s.handlerCfg)
 
+	spew.Dump(action.Actions())
 	action := action.Get(s.ActionID)
-	_, _, errRun := s.t.runner.Run(ctx, action, s.ActionID, nil)
+	fmt.Println(s.ActionID)
+
+	_, errRun := s.t.runner.RunAction(ctx, action, nil)
 
 	if errRun != nil {
 		log.Errorf("Failed to process syslogs message for ActionID [%s] for reason [%s] message lost", s.ActionID, errRun)
