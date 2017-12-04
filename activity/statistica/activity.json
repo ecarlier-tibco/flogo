@@ -1,0 +1,182 @@
+{
+	"name": "statistica_activity",
+	"type": "flogo:activity",
+	"ref": "github.com/ecarlier-tibco/flogo/activity/statistica",
+	"version": "0.0.1",
+	"title": "Name of model",
+	"description": "My_Model Activity generated from Statistica",
+	"homepage": "http://....",
+	"inputs":[
+		{
+			"name": "_x__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_y__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_z__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_x1__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_x2__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_x3__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_x4__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_x5__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_x6__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_x7__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_x8__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_x9__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_x10__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_y1__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_y2__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_y3__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_y4__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_y5__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_y6__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_y7__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_y8__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_y9__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_y10__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_z1__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_z2__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_z3__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_z4__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_z5__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_z6__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_z7__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_z8__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_z9__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_z10__",
+			"type": "number",
+			"required": true
+		}
+	],
+	"outputs": [
+		{
+			"name": "result",
+			"type": "any"
+		}
+	]
+}
