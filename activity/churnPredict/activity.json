@@ -1,0 +1,72 @@
+{
+	"name": "churnPredict",
+	"type": "flogo:activity",
+	"ref": "github.com/ecarlier-tibco/flogo/activity/churnPredict",
+	"version": "0.0.1",
+	"title": "Name of model",
+	"description": "My_Model Activity generated from Statistica",
+	"homepage": "http://....",
+	"inputs":[
+		{
+			"name": "_TRIAL_1ST_7_DAYS_CONNECTIONS__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_TRIAL_1ST_14_DAYS_CONNECTIONS__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_TRIAL_1ST_21_DAYS_CONNECTIONS__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_TRIAL_TOTAL_CONNECTIONS__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_FIRST_7_DAYS_CONNECTIONS__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_FIRST_14_DAYS_CONNECTIONS__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_FIRST_21_DAYS_CONNECTIONS__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_FIRST_MONTH_CONNECTIONS__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_MAX_COMPUTER_LIMIT__",
+			"type": "number",
+			"required": true
+		},
+		{
+			"name": "_LOCALE__",
+			"type": "string",
+			"required": true
+		},
+		{
+			"name": "_TRIAL_TYPE__",
+			"type": "string",
+			"required": true
+		}
+	],
+	"outputs": [
+		{
+			"name": "result",
+			"type": "any"
+		}
+	]
+}
