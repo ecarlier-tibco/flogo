@@ -1,5 +1,5 @@
 {
-	"name": "statistica_activity",
+	"name": "statistica",
 	"type": "flogo:activity",
 	"ref": "github.com/ecarlier-tibco/flogo/activity/statistica",
 	"version": "0.0.1",

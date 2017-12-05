@@ -1,4 +1,4 @@
-package statistica_activity
+package statistica
 
 //
 //#include <string.h> 
