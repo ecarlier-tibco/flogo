@@ -1,11 +1,12 @@
 package churnPredict
 
 //
-//#include <string.h> 
-//#include <math.h> 
+//#include <string.h>
+//#include <stdlib.h>
+//#include <math.h>
 //
-//#define STRING_EQUAL(a,b) (_stricmp(a,b)==0)
-//#define STRING_NOT_EQUAL(a,b) (_stricmp(a,b)!=0)
+//#define STRING_EQUAL(a,b) (strcasecmp(a,b)==0)
+//#define STRING_NOT_EQUAL(a,b) (strcasecmp(a,b)!=0)
 //#define STRING_SET(a,b)   strcpy(a,b)
 //
 //
@@ -107,7 +108,7 @@ package churnPredict
 //    _npca=2;
 //    _maxl=0;
 //    _maxval=-1.0e+307;
-//    if( _isnan(*_TRIAL_1ST_7_DAYS_CONNECTIONS__) || _isnan(*_TRIAL_1ST_14_DAYS_CONNECTIONS__) || _isnan(*_TRIAL_1ST_21_DAYS_CONNECTIONS__) || _isnan(*_TRIAL_TOTAL_CONNECTIONS__) || _isnan(*_FIRST_7_DAYS_CONNECTIONS__) || _isnan(*_FIRST_14_DAYS_CONNECTIONS__) || _isnan(*_FIRST_21_DAYS_CONNECTIONS__) || _isnan(*_FIRST_MONTH_CONNECTIONS__) || _isnan(*_MAX_COMPUTER_LIMIT__) ||  STRING_EQUAL(_LOCALE__,"")  ||  STRING_EQUAL(_TRIAL_TYPE__,"")  ){
+//    if( isnan(*_TRIAL_1ST_7_DAYS_CONNECTIONS__) || isnan(*_TRIAL_1ST_14_DAYS_CONNECTIONS__) || isnan(*_TRIAL_1ST_21_DAYS_CONNECTIONS__) || isnan(*_TRIAL_TOTAL_CONNECTIONS__) || isnan(*_FIRST_7_DAYS_CONNECTIONS__) || isnan(*_FIRST_14_DAYS_CONNECTIONS__) || isnan(*_FIRST_21_DAYS_CONNECTIONS__) || isnan(*_FIRST_MONTH_CONNECTIONS__) || isnan(*_MAX_COMPUTER_LIMIT__) ||  STRING_EQUAL(_LOCALE__,"")  ||  STRING_EQUAL(_TRIAL_TYPE__,"")  ){
 //      *_pRet=0;
 //      goto EndProgram;
 //    }
@@ -217,4 +218,3 @@ func (a *ModelActivity) Eval(context activity.Context) (done bool, err error) {
 
 	return true, nil
 }
-
