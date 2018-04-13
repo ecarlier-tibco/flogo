@@ -15,7 +15,7 @@
   "outputs": [
     {
       "name": "result",
-      "type": "double"
+      "type": "number"
     }
   ]
 }
