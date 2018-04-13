@@ -1,0 +1,21 @@
+{
+  "name": "stringtonumber",
+  "version": "0.0.1",
+  "title": "String To Number",
+  "ref": "github.com/ecarlier-tibco/flogo/activity/notpostedyet",
+  "type": "flogo:activity",
+  "description": "converts a string to a float number",
+  "author": "Eric Carlier <ecarlier@tibco.com>",
+  "inputs":[
+    {
+      "name": "input",
+      "type": "string"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "double"
+    }
+  ]
+}
