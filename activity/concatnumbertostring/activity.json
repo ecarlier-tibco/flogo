@@ -1,0 +1,25 @@
+{
+  "name": "concatnumbertostring",
+  "version": "0.0.1",
+  "title": "Concatenate a Number to a String",
+  "ref": "github.com/ecarlier-tibco/flogo/activity/concatnumbertostring",
+  "type": "flogo:activity",
+  "description": "Concatenate a Number to a String",
+  "author": "Eric Carlier <ecarlier@tibco.com>",
+  "inputs":[
+    {
+      "name": "inputString",
+      "type": "string"
+    },
+    {
+      "name": "inputNumber",
+      "type": "number"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "string"
+    }
+  ]
+}
