@@ -1,0 +1,54 @@
+{
+  "name": "numdatasim",
+  "version": "0.0.1",
+  "type": "flogo:activity",
+  "title": "Generate random number value",
+  "ref": "github.com/ecarlier-tibco/flogo/activity/numdatasim",
+  "description": "generating random number values with a given distribution",
+  "author": "Eric Carlier <ecarlier@tibco.com>",
+  "homepage": "https://github.com/ecarlier-tibco/flogo/tree/master/activity/numdatasim",
+  "inputs":[
+    {
+      "name" : "distributionType",
+      "type" : "string",
+      "required" : true,
+      "allowed" : ["Normal", "Uniform", "Exponential", "Triangular"]
+    },
+    {
+      "name": "repeatSequence",
+      "type": "boolean",
+      "value": false
+    },
+    {
+      "name" : "min",
+      "type" : "number"
+    },
+    {
+      "name" : "max",
+      "type" : "number"
+    },
+    {
+      "name" : "mean",
+      "type" : "number"
+    },
+    {
+      "name" : "sigma",
+      "type" : "number"
+    },
+    {
+      "name" : "mode",
+      "type" : "number"
+    },
+    {
+      "name" : "lambda",
+      "type" : "number"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "output",
+      "type": "number"
+    }
+  ]
+}
+
