@@ -1,0 +1,48 @@
+{
+  "name": "multichain",
+  "version": "0.0.1",
+  "type": "flogo:activity",
+  "title": "MultiChain Client Activity",
+  "ref": "github.com/ecarlier-tibco/flogo/activity/multichain",
+  "description": "Acts as a RPC Client to a MultiChain network",
+  "author": "Eric Carlier <ecarlier@tibco.com>",
+  "homepage": "https://github.com/ecarlier-tibco/flogo/tree/master/activity/multichain",
+  "inputs":[
+    {
+      "name": "chain",
+      "type": "string"
+    },   
+    {
+      "name": "host",
+      "type": "string",
+      "value": "localhost"
+    },
+    {
+      "name": "port",
+      "type": "integer"
+    },
+    {
+      "name": "rpcuser",
+      "type": "string"
+    },
+    {
+      "name": "rpcpassword",
+      "type": "string"
+    },
+    {
+      "name": "command",
+      "type": "string",
+      "allowed": ["getinfo","getaddresses"]
+    }
+  ],
+  "outputs": [
+    {
+      "name": "success",
+      "type": "boolean"
+    },
+    {
+      "name": "response",
+      "type": "any"
+    }
+  ]
+}
