@@ -33,6 +33,14 @@
       "name": "command",
       "type": "string",
       "allowed": ["getinfo","getaddresses"]
+    },
+    {
+      "name": "parameters",
+      "type": "params"
+    },
+    {
+      "name": "jsonData",
+      "type": "object"
     }
   ],
   "outputs": [

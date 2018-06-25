@@ -8,6 +8,10 @@ import (
 
 var log = logger.GetLogger("activity-multichain")
 
+type jsonPublishData struct {
+	JSON interface{} `json:"json"`
+}
+
 const (
 	ivChain       = "chain"
 	ivHost        = "host"
@@ -15,6 +19,8 @@ const (
 	ivRPCUser     = "rpcuser"
 	ivRPCPassword = "rpcpassword"
 	ivCommand     = "command"
+	ivParameters  = "parameters"
+	ivJSONData    = "jsonData"
 	ovSuccess     = "success"
 	ovResponse    = "response"
 )
@@ -51,11 +57,17 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 		a.client = multichain.NewClient(chain, rpcuser, rpcpassword, port)
 		a.client = a.client.ViaNode(host, port)
 	}
-	a.client = a.client.DebugMode()
+
+	loglevel := log.GetLogLevel()
+	if loglevel == logger.DebugLevel {
+		a.client = a.client.DebugMode()
+	}
 
 	cmd := context.GetInput(ivCommand).(string)
+
 	switch cmd {
 	case "getinfo":
+		log.Debug("Sending getinfo command")
 		resp, err := a.client.GetInfo()
 		if err != nil {
 			log.Errorf("multichain getinfo error [%v]", err)
@@ -63,8 +75,10 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 		}
 		context.SetOutput(ovSuccess, true)
 		context.SetOutput(ovResponse, resp["result"])
+		log.Debugf("getinfo response [%v]", resp["result"])
 
 	case "getaddresses":
+		log.Debug("Sending getaddresses command")
 		resp, err := a.client.GetAddresses(false)
 		if err != nil {
 			log.Errorf("multichain getaddresses error [%v]", err)
@@ -73,6 +87,292 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 
 		context.SetOutput(ovSuccess, true)
 		context.SetOutput(ovResponse, resp["result"])
+		log.Debugf("getaddresses response [%v]", resp["result"])
+
+	case "publish":
+		log.Debug("Sending publish command")
+		params := context.GetInput(ivParameters).(map[string]string)
+
+		log.Debugf("Stream Name [%v]", params["stream"])
+
+		var ok bool
+		var stream, key, data string
+
+		stream, ok = params["stream"]
+		if !ok {
+			log.Error("Missing mandatory parameter [stream] for [publish] command")
+			return false, nil
+		}
+
+		key, ok = params["key"]
+		if !ok {
+			log.Error("Missing mandatory parameter [key] for [publish] command")
+			return false, nil
+		}
+
+		data, ok = params["data"]
+		var jsonData interface{}
+		if !ok {
+			jsonData = context.GetInput(ivJSONData)
+
+			if jsonData == nil {
+				log.Error("Missing mandatory parameter [data] for [publish] command")
+				return false, nil
+			}
+			log.Debugf("JSON DATA [%v]", jsonData)
+		} else {
+			log.Debugf("%s", data)
+		}
+		from, fromPresent := params["from"]
+		if fromPresent {
+			log.Debugf("Received From [%v]", from)
+
+			var msg interface{}
+			if jsonData != nil {
+				dataobj := &jsonPublishData{
+					JSON: jsonData,
+				}
+				msg = a.client.Command(
+					"publishfrom",
+					[]interface{}{
+						from,
+						stream,
+						key,
+						dataobj,
+					},
+				)
+			} else {
+				msg = a.client.Command(
+					"publishfrom",
+					[]interface{}{
+						from,
+						stream,
+						key,
+						data,
+					},
+				)
+			}
+
+			resp, err := a.client.Post(msg)
+
+			if err != nil {
+				log.Errorf("multichain publishfrom error [%v]", err)
+				return false, err
+			}
+
+			context.SetOutput(ovSuccess, true)
+			context.SetOutput(ovResponse, resp["result"])
+			log.Debugf("publishfrom response [%v]", resp["result"])
+		} else {
+			log.Debug("No from defined")
+
+			var msg interface{}
+			if jsonData != nil {
+				dataobj := &jsonPublishData{
+					JSON: jsonData,
+				}
+				msg = a.client.Command(
+					"publish",
+					[]interface{}{
+						stream,
+						key,
+						dataobj,
+					},
+				)
+			} else {
+				msg = a.client.Command(
+					"publish",
+					[]interface{}{
+						stream,
+						key,
+						data,
+					},
+				)
+			}
+
+			resp, err := a.client.Post(msg)
+
+			if err != nil {
+				log.Errorf("multichain publish error [%v]", err)
+				return false, err
+			}
+
+			context.SetOutput(ovSuccess, true)
+			context.SetOutput(ovResponse, resp["result"])
+			log.Debugf("publish response [%v]", resp["result"])
+
+		}
+
+	case "subscribe", "unsubscibe":
+		log.Debugf("Sending %v command", cmd)
+		params := context.GetInput(ivParameters).(map[string]string)
+
+		var ok bool
+		var stream string
+
+		stream, ok = params["stream"]
+		if !ok {
+			log.Errorf("Missing mandatory parameter [stream] for [%v] command", cmd)
+			return false, nil
+		}
+
+		msg := a.client.Command(
+			cmd,
+			[]interface{}{
+				stream,
+			},
+		)
+		resp, err := a.client.Post(msg)
+
+		if err != nil {
+			log.Errorf("multichain %v error [%v]", cmd, err)
+			return false, err
+		}
+
+		context.SetOutput(ovSuccess, true)
+		context.SetOutput(ovResponse, resp["result"])
+		log.Debugf("%v response [%v]", cmd, resp["result"])
+
+	case "getstreamitem":
+		log.Debugf("Sending %v command", cmd)
+		params := context.GetInput(ivParameters).(map[string]string)
+
+		var ok bool
+		var stream, txid string
+
+		stream, ok = params["stream"]
+		if !ok {
+			log.Errorf("Missing mandatory parameter [stream] for [%v] command", cmd)
+			return false, nil
+		}
+
+		txid, ok = params["txid"]
+		if !ok {
+			log.Errorf("Missing mandatory parameter [txid] for [%v] command", cmd)
+			return false, nil
+		}
+
+		msg := a.client.Command(
+			cmd,
+			[]interface{}{
+				stream,
+				txid,
+			},
+		)
+		resp, err := a.client.Post(msg)
+
+		if err != nil {
+			log.Errorf("multichain %v error [%v]", cmd, err)
+			return false, err
+		}
+
+		context.SetOutput(ovSuccess, true)
+		context.SetOutput(ovResponse, resp["result"])
+		log.Debugf("%v response [%v]", cmd, resp["result"])
+
+	case "liststreamkeyitems":
+		log.Debugf("Sending %v command", cmd)
+		params := context.GetInput(ivParameters).(map[string]string)
+
+		var ok bool
+		var stream, key string
+
+		stream, ok = params["stream"]
+		if !ok {
+			log.Errorf("Missing mandatory parameter [stream] for [%v] command", cmd)
+			return false, nil
+		}
+
+		key, ok = params["key"]
+		if !ok {
+			log.Errorf("Missing mandatory parameter [key] for [%v] command", cmd)
+			return false, nil
+		}
+
+		msg := a.client.Command(
+			cmd,
+			[]interface{}{
+				stream,
+				key,
+			},
+		)
+		resp, err := a.client.Post(msg)
+
+		if err != nil {
+			log.Errorf("multichain %v error [%v]", cmd, err)
+			return false, err
+		}
+
+		context.SetOutput(ovSuccess, true)
+		context.SetOutput(ovResponse, resp["result"])
+		log.Debugf("%v response [%v]", cmd, resp["result"])
+
+	case "liststreamkeys", "liststreamitems", "liststreampublishers":
+		log.Debugf("Sending %v command", cmd)
+		params := context.GetInput(ivParameters).(map[string]string)
+
+		var ok bool
+		var stream string
+
+		stream, ok = params["stream"]
+		if !ok {
+			log.Errorf("Missing mandatory parameter [stream] for [%v] command", cmd)
+			return false, nil
+		}
+
+		msg := a.client.Command(
+			cmd,
+			[]interface{}{
+				stream,
+			},
+		)
+		resp, err := a.client.Post(msg)
+
+		if err != nil {
+			log.Errorf("multichain %v error [%v]", cmd, err)
+			return false, err
+		}
+
+		context.SetOutput(ovSuccess, true)
+		context.SetOutput(ovResponse, resp["result"])
+		log.Debugf("%v response [%v]", cmd, resp["result"])
+
+	case "liststreampublisheritems":
+		log.Debugf("Sending %v command", cmd)
+		params := context.GetInput(ivParameters).(map[string]string)
+
+		var ok bool
+		var stream, address string
+
+		stream, ok = params["stream"]
+		if !ok {
+			log.Errorf("Missing mandatory parameter [stream] for [%v] command", cmd)
+			return false, nil
+		}
+
+		address, ok = params["address"]
+		if !ok {
+			log.Errorf("Missing mandatory parameter [address] for [%v] command", cmd)
+			return false, nil
+		}
+
+		msg := a.client.Command(
+			cmd,
+			[]interface{}{
+				stream,
+				address,
+			},
+		)
+		resp, err := a.client.Post(msg)
+
+		if err != nil {
+			log.Errorf("multichain %v error [%v]", cmd, err)
+			return false, err
+		}
+
+		context.SetOutput(ovSuccess, true)
+		context.SetOutput(ovResponse, resp["result"])
+		log.Debugf("%v response [%v]", cmd, resp["result"])
 
 	default:
 		log.Errorf("Invalid Command received [%v]", cmd)
