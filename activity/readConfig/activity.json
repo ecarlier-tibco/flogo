@@ -3,7 +3,7 @@
   "type": "flogo:activity",
   "ref": "github.com/ecarlier-tibco/flogo/activity/readConfig",
   "title": "Read a json configuration file",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Read a configuration file and stores config params and values as global parameters",
   "author": "Eric Carlier <ecarlier@tibco.com>",
   "homepage": "https://github.com/ecarlier-tibco/flogo/tree/master/activity/readConfigco",
