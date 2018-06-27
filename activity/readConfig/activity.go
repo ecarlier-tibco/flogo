@@ -15,7 +15,7 @@ var log = logger.GetLogger("activity-ecarlier-readConfig")
 const (
 	ivFileName = "configFile"
 
-	ovResult = "result"
+	ovConfigData = "configData"
 )
 
 type jsonobject struct {
@@ -66,7 +66,11 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 		log.Error(errorMsg)
 		return false, activity.NewError(errorMsg, "", nil)
 	}
+
+	var configData map[string]interface{}
+	configData = make(map[string]interface{})
 	for _, param := range jsonconfig.Config.Parameters {
+		configData[param.Name] = param.Value
 		dt, ok := data.ToTypeEnum(param.Type)
 		if ok {
 			data.GetGlobalScope().AddAttr(param.Name, dt, param.Value)
@@ -75,6 +79,6 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 		}
 	}
 
-	context.SetOutput(ovResult, "ok")
+	context.SetOutput(ovConfigData, configData)
 	return true, nil
 }
