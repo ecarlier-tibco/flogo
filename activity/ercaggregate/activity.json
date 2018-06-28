@@ -1,14 +1,14 @@
 {
   "name": "erc-aggregator",
   "type": "flogo:activity",
-  "ref": "github.com/ecarlier-tibco/flogo-contrib/activity/aggregate",
+  "ref": "github.com/ecarlier-tibco/flogo/activity/ercaggregate",
   "version": "0.0.1",
   "title": "Aggregate by ERC",
   "description": "Simple Aggregator Activity, min and max added for time block",
-  "homepage": "https://github.com/ecarlier-tibco/flogo-contrib/tree/master/activity/aggregate",
+  "homepage": "https://github.com/ecarlier-tibco/flogo/tree/master/activity/ercaggregate",
   "input":[
     {
-      "name": "function",
+      "name": "functions",
       "type": "array",
       "required": true
     },

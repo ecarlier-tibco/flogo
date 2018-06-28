@@ -7,7 +7,7 @@ import (
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
 	"github.com/TIBCOSoftware/flogo-lib/core/data"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
-	"github.com/ecarlier-tibco/flogo-contrib/activity/aggregate/aggregator"
+	"github.com/ecarlier-tibco/flogo/activity/ercaggregate/aggregator"
 )
 
 // activityLogger is the default logger for the Aggregate Activity
