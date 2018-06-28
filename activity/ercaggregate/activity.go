@@ -14,7 +14,7 @@ import (
 var activityLogger = logger.GetLogger("activity-tibco-aggregate")
 
 const (
-	ivFunction   = "function"
+	ivFunction   = "functions"
 	ivWindowSize = "windowSize"
 	ivValue      = "value"
 
