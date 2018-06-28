@@ -1,15 +1,16 @@
 package aggregator
 
 import (
-	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"sync"
+
+	"github.com/TIBCOSoftware/flogo-lib/logger"
 )
 
 type Aggregator interface {
-	Add(value float64) (report bool, result float64)
+	Add(value float64) (report bool, result map[string]interface{})
 }
 
-type Factory func(windowSize int) Aggregator
+type Factory func(windowSize int, functions []string) Aggregator
 
 var (
 	factoryMu sync.RWMutex
