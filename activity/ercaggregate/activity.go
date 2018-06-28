@@ -97,10 +97,12 @@ func (a *AggregateActivity) Eval(context activity.Context) (done bool, err error
 		}
 
 		reportsList[aggrName], resultsList[aggrName] = aggr.Add(value)
+		activityLogger.Infof("RESULTS :\n!%v!\n!%v!", reportsList, resultsList)
 	}
 
 	context.SetOutput(ovReport, reportsList)
 	context.SetOutput(ovResult, resultsList)
+	activityLogger.Infof("END RESULTS :\n!%v!\n!%v!", reportsList, resultsList)
 
 	return true, nil
 }
