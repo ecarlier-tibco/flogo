@@ -9,9 +9,8 @@
   "input":[
     {
       "name": "function",
-      "type": "string",
-      "required": true,
-      "allowed" : ["block_avg", "moving_avg", "timeblockavg","timeblockmin","timeblockmax"]
+      "type": "array",
+      "required": true
     },
     {
       "name": "windowSize",
