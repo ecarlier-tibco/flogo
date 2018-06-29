@@ -13,6 +13,12 @@
       "required": true
     },
     {
+      "name": "windowType",
+      "type": "string",
+      "allowed": ["sizeblock","sizemoving","timeblock"],
+      "required": true
+    },
+    {
       "name": "windowSize",
       "type": "integer",
       "required": true

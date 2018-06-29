@@ -17,6 +17,7 @@ const (
 	ivFunction   = "functions"
 	ivWindowSize = "windowSize"
 	ivValue      = "value"
+	ivWindowType = "windowType"
 
 	ovResult = "result"
 	ovReport = "report"
@@ -51,58 +52,58 @@ func (a *AggregateActivity) Metadata() *activity.Metadata {
 func (a *AggregateActivity) Eval(context activity.Context) (done bool, err error) {
 
 	aggregatorKey := context.ActivityHost().Name() + ":" + context.Name()
-	aggrNamesList, _ := context.GetInput(ivFunction).([]string)
-	resultsList := make(map[string]float64)
-	reportsList := make(map[string]bool)
+	functionsList, _ := context.GetInput(ivFunction).([]interface{})
+	windowType, _ := context.GetInput(ivWindowType).(string)
 
-	for _, aggrName := range aggrNamesList {
-
-		a.mutex.RLock()
-		//get aggregator for activity, assumes flow & task names are unique
-		aggr, ok := a.aggregators[aggregatorKey+":"+aggrName]
-
-		a.mutex.RUnlock()
-
-		//if window not create for this flow, create it
-
-		if !ok {
-
-			//go doesn't have lock upgrades or try, so do same check again
-
-			a.mutex.Lock()
-			aggr, ok = a.aggregators[aggregatorKey+":"+aggrName]
-
-			if !ok {
-				windowSize, _ := context.GetInput(ivWindowSize).(int)
-
-				factory := aggregator.GetFactory(aggrName)
-
-				if factory == nil {
-					return false, errors.New("Unknown aggregator: " + aggrName)
-				}
-
-				aggr = factory(windowSize)
-				a.aggregators[aggregatorKey+":"+aggrName] = aggr
-
-				activityLogger.Debug("Aggregator created for ", aggregatorKey)
-			}
-
-			a.mutex.Unlock()
-		}
-
-		value, ok := context.GetInput(ivValue).(float64)
-
-		if !ok {
-			value, _ = data.CoerceToNumber(context.GetInput(ivValue))
-		}
-
-		reportsList[aggrName], resultsList[aggrName] = aggr.Add(value)
-		activityLogger.Infof("RESULTS :\n!%v!\n!%v!", reportsList, resultsList)
+	functions := make([]string, len(functionsList))
+	for i, v := range functionsList {
+		functions[i] = v.(string)
 	}
 
-	context.SetOutput(ovReport, reportsList)
-	context.SetOutput(ovResult, resultsList)
-	activityLogger.Infof("END RESULTS :\n!%v!\n!%v!", reportsList, resultsList)
+	a.mutex.RLock()
+	//get aggregator for activity, assumes flow & task names are unique
+	aggr, ok := a.aggregators[aggregatorKey]
+
+	a.mutex.RUnlock()
+
+	//if window not create for this flow, create it
+
+	if !ok {
+
+		//go doesn't have lock upgrades or try, so do same check again
+
+		a.mutex.Lock()
+		aggr, ok = a.aggregators[aggregatorKey]
+
+		if !ok {
+			windowSize, _ := context.GetInput(ivWindowSize).(int)
+
+			factory := aggregator.GetFactory(windowType)
+
+			if factory == nil {
+				return false, errors.New("Unknown Window Type: " + windowType)
+			}
+
+			aggr = factory(windowSize, functions)
+			a.aggregators[aggregatorKey] = aggr
+
+			activityLogger.Debug("Aggregator created for ", aggregatorKey)
+		}
+
+		a.mutex.Unlock()
+	}
+
+	value, ok := context.GetInput(ivValue).(float64)
+
+	if !ok {
+		value, _ = data.CoerceToNumber(context.GetInput(ivValue))
+	}
+
+	report, result := aggr.Add(value)
+	activityLogger.Debugf("RESULTS :\n!%v!\n!%v!", report, result)
+
+	context.SetOutput(ovReport, report)
+	context.SetOutput(ovResult, result)
 
 	return true, nil
 }
