@@ -1,0 +1,21 @@
+{
+  "name": "datatojson",
+  "version": "0.0.1",
+  "title": "Data Object To JSON String",
+  "ref": "github.com/ecarlier-tibco/flogo/activity/datatojson",
+  "type": "flogo:activity",
+  "description": "converts a string to a float number",
+  "author": "Eric Carlier <ecarlier@tibco.com>",
+  "inputs":[
+    {
+      "name": "input",
+      "type": "any"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "string"
+    }
+  ]
+}
