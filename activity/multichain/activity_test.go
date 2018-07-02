@@ -50,11 +50,11 @@ func TestEval(t *testing.T) {
 	tc := test.NewTestActivityContext(getActivityMetadata())
 
 	//setup attrs
-	tc.SetInput("chain", "demochain")
+	tc.SetInput("chain", "YOUR_CHAIN_NETWORK_NAME")
 	tc.SetInput("host", "localhost")
 	tc.SetInput("port", 6284)
-	tc.SetInput("rpcuser", "yourrpcuser")
-	tc.SetInput("rpcpassword", "yourrpcpassword")
+	tc.SetInput("rpcuser", "YOUR_RPC_USER")
+	tc.SetInput("rpcpassword", "YOUR_RPC_PWD")
 
 	var ok bool
 
@@ -63,7 +63,7 @@ func TestEval(t *testing.T) {
 
 	ok = tc.GetOutput("success").(bool)
 	if ok {
-		fmt.Printf("getinfo response [%v]", tc.GetOutput("response"))
+		fmt.Printf("getinfo response [%v]\n", tc.GetOutput("response"))
 	}
 
 	tc.SetInput("command", "getaddresses")
@@ -71,7 +71,7 @@ func TestEval(t *testing.T) {
 
 	ok = tc.GetOutput("success").(bool)
 	if ok {
-		fmt.Printf("getaddresses response [%v]", tc.GetOutput("response"))
+		fmt.Printf("getaddresses response [%v]\n", tc.GetOutput("response"))
 	}
 
 	var parameters map[string]string
@@ -170,6 +170,34 @@ func TestEval(t *testing.T) {
 	ok = tc.GetOutput("success").(bool)
 	if ok {
 		fmt.Printf("liststreampublisheritems response [%v]\n", tc.GetOutput("response"))
+	}
+
+	tc.SetInput("command", "create")
+
+	parameters = make(map[string]string)
+	parameters["type"] = "stream"
+	parameters["name"] = "testcreate_stream"
+	tc.SetInput("parameters", parameters)
+
+	act.Eval(tc)
+
+	ok = tc.GetOutput("success").(bool)
+	if ok {
+		fmt.Printf("create response [%v]\n", tc.GetOutput("response"))
+	}
+
+	tc.SetInput("command", "grant")
+
+	parameters = make(map[string]string)
+	parameters["addresses"] = "17uyvHrXm3XRp68eJTtwi2pBTVVrHrSfmNVCrn"
+	parameters["permissions"] = "testcreate_stream.write"
+	tc.SetInput("parameters", parameters)
+
+	act.Eval(tc)
+
+	ok = tc.GetOutput("success").(bool)
+	if ok {
+		fmt.Printf("grant response [%v]\n", tc.GetOutput("response"))
 	}
 
 }

@@ -1,6 +1,8 @@
 package multichain
 
 import (
+	"strings"
+
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
 	multichain "github.com/golangdaddy/multichain-client"
@@ -89,11 +91,83 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 		context.SetOutput(ovResponse, resp["result"])
 		log.Debugf("getaddresses response [%v]", resp["result"])
 
+	case "create":
+		// type, name, open (bool) parameters
+		log.Debug("Sending create command")
+
+		params := context.GetInput(ivParameters).(map[string]string)
+
+		var ok, open bool
+		var typeToCreate, name, openstr string
+
+		typeToCreate, ok = params["type"]
+		if !ok {
+			log.Error("Missing mandatory parameter [type] for [create] command")
+			return false, nil
+		}
+
+		name, ok = params["name"]
+		if !ok {
+			log.Error("Missing mandatory parameter [name] for [create] command")
+			return false, nil
+		}
+
+		open = false
+		openstr, ok = params["open"]
+		if ok && openstr == "true" {
+			open = true
+		}
+
+		resp, err := a.client.Create(typeToCreate, name, open)
+
+		if err != nil {
+			log.Errorf("multichain create error [%v]", err)
+			return false, err
+		}
+
+		context.SetOutput(ovSuccess, true)
+		context.SetOutput(ovResponse, resp["result"])
+		log.Debugf("create response [%v]", resp["result"])
+
+	case "grant":
+		// addresses, permissions list of strings (comma-separated) parameters
+		log.Debug("Sending grant command")
+
+		params := context.GetInput(ivParameters).(map[string]string)
+
+		var ok bool
+		var addressesStr, permissionsStr string
+
+		addressesStr, ok = params["addresses"]
+		if !ok {
+			log.Error("Missing mandatory parameter [addresses] for [grant] command")
+			return false, nil
+		}
+
+		addresses := strings.Split(addressesStr, ",")
+
+		permissionsStr, ok = params["permissions"]
+		if !ok {
+			log.Error("Missing mandatory parameter [permissions] for [grant] command")
+			return false, nil
+		}
+
+		permissions := strings.Split(permissionsStr, ",")
+
+		resp, err := a.client.Grant(addresses, permissions)
+
+		if err != nil {
+			log.Errorf("multichain grant error [%v]", err)
+			return false, err
+		}
+
+		context.SetOutput(ovSuccess, true)
+		context.SetOutput(ovResponse, resp["result"])
+		log.Debugf("grant response [%v]", resp["result"])
+
 	case "publish":
 		log.Debug("Sending publish command")
 		params := context.GetInput(ivParameters).(map[string]string)
-
-		log.Debugf("Stream Name [%v]", params["stream"])
 
 		var ok bool
 		var stream, key, data string
@@ -103,6 +177,8 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 			log.Error("Missing mandatory parameter [stream] for [publish] command")
 			return false, nil
 		}
+
+		log.Debugf("Stream Name [%v]", params["stream"])
 
 		key, ok = params["key"]
 		if !ok {

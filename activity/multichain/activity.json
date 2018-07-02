@@ -32,7 +32,7 @@
     {
       "name": "command",
       "type": "string",
-      "allowed": ["getinfo","getaddresses","publish","subscribe", "unsubscibe","getstreamitem","liststreamkeyitems","liststreamkeys", "liststreamitems", "liststreampublishers","liststreampublisheritems"]
+      "allowed": ["getinfo","getaddresses","create","grant","publish","subscribe", "unsubscibe","getstreamitem","liststreamkeyitems","liststreamkeys", "liststreamitems", "liststreampublishers","liststreampublisheritems"]
     },
     {
       "name": "parameters",
