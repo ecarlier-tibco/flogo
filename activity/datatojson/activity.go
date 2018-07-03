@@ -1,4 +1,4 @@
-package stringtonumber
+package datatojson
 
 import (
 	"encoding/json"
