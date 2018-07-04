@@ -1,7 +1,6 @@
 package multichain
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
@@ -124,7 +123,7 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 			[]interface{}{
 				typeToCreate,
 				name,
-				fmt.Sprintf("open=%v", open),
+				open,
 			},
 		)
 
