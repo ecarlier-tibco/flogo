@@ -1,0 +1,21 @@
+{
+  "name": "passthru",
+  "version": "0.0.1",
+  "title": "Pass Through",
+  "ref": "github.com/ecarlier-tibco/flogo/activity/passthru",
+  "type": "flogo:activity",
+  "description": "cPass Through to apply mappings on strings",
+  "author": "Eric Carlier <ecarlier@tibco.com>",
+  "inputs":[
+    {
+      "name": "input",
+      "type": "string"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "string"
+    }
+  ]
+}
