@@ -54,7 +54,7 @@ func TestEval(t *testing.T) {
 	tc.SetInput("host", "localhost")
 	tc.SetInput("port", 6284)
 	tc.SetInput("rpcuser", "multichainrpc")
-	tc.SetInput("rpcpassword", "A2qTbcspjEZZkk7KFekA5dJNwvD4EqFR18vFUwSxpHVQ")
+	tc.SetInput("rpcpassword", "xxxx")
 
 	var ok bool
 
