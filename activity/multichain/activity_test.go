@@ -50,11 +50,11 @@ func TestEval(t *testing.T) {
 	tc := test.NewTestActivityContext(getActivityMetadata())
 
 	//setup attrs
-	tc.SetInput("chain", "YOUR_CHAIN_NETWORK_NAME")
+	tc.SetInput("chain", "demochain")
 	tc.SetInput("host", "localhost")
 	tc.SetInput("port", 6284)
-	tc.SetInput("rpcuser", "YOUR_RPC_USER")
-	tc.SetInput("rpcpassword", "YOUR_RPC_PWD")
+	tc.SetInput("rpcuser", "multichainrpc")
+	tc.SetInput("rpcpassword", "A2qTbcspjEZZkk7KFekA5dJNwvD4EqFR18vFUwSxpHVQ")
 
 	var ok bool
 
@@ -74,11 +74,11 @@ func TestEval(t *testing.T) {
 		fmt.Printf("getaddresses response [%v]\n", tc.GetOutput("response"))
 	}
 
-	var parameters map[string]string
+	var parameters map[string]interface{}
 
 	tc.SetInput("command", "publish")
 
-	parameters = make(map[string]string)
+	parameters = make(map[string]interface{})
 	parameters["stream"] = "teststream"
 	parameters["key"] = "testkey1"
 	tc.SetInput("parameters", parameters)
@@ -98,7 +98,7 @@ func TestEval(t *testing.T) {
 	}
 
 	tc.SetInput("command", "getstreamitem")
-	parameters = make(map[string]string)
+	parameters = make(map[string]interface{})
 	parameters["stream"] = "teststream"
 	parameters["txid"] = txid
 
@@ -110,94 +110,94 @@ func TestEval(t *testing.T) {
 	if ok {
 		fmt.Printf("getstreamitem response [%v]\n", tc.GetOutput("response"))
 	}
+	/*
+		// liststreamkeys test
+		tc.SetInput("command", "liststreamkeys")
+		parameters = make(map[string]string)
+		parameters["stream"] = "teststream"
 
-	// liststreamkeys test
-	tc.SetInput("command", "liststreamkeys")
-	parameters = make(map[string]string)
-	parameters["stream"] = "teststream"
+		tc.SetInput("parameters", parameters)
 
-	tc.SetInput("parameters", parameters)
+		act.Eval(tc)
 
-	act.Eval(tc)
+		ok = tc.GetOutput("success").(bool)
+		if ok {
+			fmt.Printf("liststreamkeys response [%v]\n", tc.GetOutput("response"))
+		}
 
-	ok = tc.GetOutput("success").(bool)
-	if ok {
-		fmt.Printf("liststreamkeys response [%v]\n", tc.GetOutput("response"))
-	}
+		// test liststreamkeyitems
+		tc.SetInput("command", "liststreamkeyitems")
+		parameters = make(map[string]interface{})
+		parameters["stream"] = "teststream"
+		parameters["key"] = "testkey1"
+		tc.SetInput("parameters", parameters)
 
-	// test liststreamkeyitems
-	tc.SetInput("command", "liststreamkeyitems")
-	parameters = make(map[string]string)
-	parameters["stream"] = "teststream"
-	parameters["key"] = "testkey1"
-	tc.SetInput("parameters", parameters)
+		act.Eval(tc)
 
-	act.Eval(tc)
+		ok = tc.GetOutput("success").(bool)
+		if ok {
+			fmt.Printf("liststreamkeyitems response [%v]\n", tc.GetOutput("response"))
+		}
 
-	ok = tc.GetOutput("success").(bool)
-	if ok {
-		fmt.Printf("liststreamkeyitems response [%v]\n", tc.GetOutput("response"))
-	}
+		// test liststreamkeyitems
+		tc.SetInput("command", "liststreampublishers")
+		parameters = make(map[string]interface{})
+		parameters["stream"] = "teststream"
+		tc.SetInput("parameters", parameters)
 
-	// test liststreamkeyitems
-	tc.SetInput("command", "liststreampublishers")
-	parameters = make(map[string]string)
-	parameters["stream"] = "teststream"
-	tc.SetInput("parameters", parameters)
+		act.Eval(tc)
 
-	act.Eval(tc)
+		ok = tc.GetOutput("success").(bool)
+		var publisher string
+		if ok {
+			fmt.Printf("liststreampublishers response [%v]\n", tc.GetOutput("response"))
+			resparray := tc.GetOutput("response").([]interface{})
+			respitem := resparray[0].(map[string]interface{})
+			publisher = respitem["publisher"].(string)
 
-	ok = tc.GetOutput("success").(bool)
-	var publisher string
-	if ok {
-		fmt.Printf("liststreampublishers response [%v]\n", tc.GetOutput("response"))
-		resparray := tc.GetOutput("response").([]interface{})
-		respitem := resparray[0].(map[string]interface{})
-		publisher = respitem["publisher"].(string)
+		}
 
-	}
+		// 17uyvHrXm3XRp68eJTtwi2pBTVVrHrSfmNVCrn
+		// test liststreampublisheritems
+		tc.SetInput("command", "liststreampublisheritems")
+		parameters = make(map[string]interface{})
+		parameters["stream"] = "teststream"
+		parameters["address"] = publisher
+		tc.SetInput("parameters", parameters)
 
-	// 17uyvHrXm3XRp68eJTtwi2pBTVVrHrSfmNVCrn
-	// test liststreampublisheritems
-	tc.SetInput("command", "liststreampublisheritems")
-	parameters = make(map[string]string)
-	parameters["stream"] = "teststream"
-	parameters["address"] = publisher
-	tc.SetInput("parameters", parameters)
+		act.Eval(tc)
 
-	act.Eval(tc)
+		ok = tc.GetOutput("success").(bool)
+		if ok {
+			fmt.Printf("liststreampublisheritems response [%v]\n", tc.GetOutput("response"))
+		}
 
-	ok = tc.GetOutput("success").(bool)
-	if ok {
-		fmt.Printf("liststreampublisheritems response [%v]\n", tc.GetOutput("response"))
-	}
+		tc.SetInput("command", "create")
 
-	tc.SetInput("command", "create")
+		parameters = make(map[string]interface{})
+		parameters["type"] = "stream"
+		parameters["name"] = "testcreate_stream"
+		tc.SetInput("parameters", parameters)
 
-	parameters = make(map[string]string)
-	parameters["type"] = "stream"
-	parameters["name"] = "testcreate_stream"
-	tc.SetInput("parameters", parameters)
+		act.Eval(tc)
 
-	act.Eval(tc)
+		ok = tc.GetOutput("success").(bool)
+		if ok {
+			fmt.Printf("create response [%v]\n", tc.GetOutput("response"))
+		}
 
-	ok = tc.GetOutput("success").(bool)
-	if ok {
-		fmt.Printf("create response [%v]\n", tc.GetOutput("response"))
-	}
+		tc.SetInput("command", "grant")
 
-	tc.SetInput("command", "grant")
+		parameters = make(map[string]interface{})
+		parameters["addresses"] = "17uyvHrXm3XRp68eJTtwi2pBTVVrHrSfmNVCrn"
+		parameters["permissions"] = "testcreate_stream.write"
+		tc.SetInput("parameters", parameters)
 
-	parameters = make(map[string]string)
-	parameters["addresses"] = "17uyvHrXm3XRp68eJTtwi2pBTVVrHrSfmNVCrn"
-	parameters["permissions"] = "testcreate_stream.write"
-	tc.SetInput("parameters", parameters)
+		act.Eval(tc)
 
-	act.Eval(tc)
-
-	ok = tc.GetOutput("success").(bool)
-	if ok {
-		fmt.Printf("grant response [%v]\n", tc.GetOutput("response"))
-	}
-
+		ok = tc.GetOutput("success").(bool)
+		if ok {
+			fmt.Printf("grant response [%v]\n", tc.GetOutput("response"))
+		}
+	*/
 }
