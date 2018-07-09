@@ -1,0 +1,17 @@
+{
+  "name": "actsleep",
+  "version": "0.0.1",
+  "title": "Pass Through",
+  "ref": "github.com/ecarlier-tibco/flogo/activity/actsleep",
+  "type": "flogo:activity",
+  "description": "Sleep the given amount of milliseconds",
+  "author": "Eric Carlier <ecarlier@tibco.com>",
+  "inputs":[
+    {
+      "name": "time_ms",
+      "type": "integer"
+    }
+  ],
+  "outputs": [
+  ]
+}
