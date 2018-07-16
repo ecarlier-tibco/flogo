@@ -1,0 +1,205 @@
+{
+  "name": "WalletNotify",
+  "type": "flogo:app",
+  "version": "0.0.1",
+  "appModel": "1.0.0",
+  "triggers": [
+    {
+      "id": "cli_trigger",
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/cli",
+      "name": "CLI Trigger",
+      "description": "Simple CLI Trigger",
+      "settings": {},
+      "handlers": [
+        {
+          "action": {
+            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+            "data": {
+              "flowURI": "res://flow:notify"
+            },
+            "mappings": {
+              "input": [
+                {
+                  "mapTo": "notif_data",
+                  "type": "assign",
+                  "value": "$.args[0]"
+                }
+              ]
+            }
+          },
+          "settings": {
+            "command": "notify",
+            "default": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "flow:notify",
+      "data": {
+        "name": "notify",
+        "metadata": {
+          "input": [
+            {
+              "name": "notif_data",
+              "type": "object"
+            }
+          ]
+        },
+        "tasks": [
+          {
+            "id": "log_all",
+            "name": "Log Publish Content",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "message": null,
+                "flowInfo": "false",
+                "addToFlow": "false"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$flow.notif_data",
+                    "mapTo": "message"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "get_stream_type",
+            "name": "Get Stream Type (if alerts)",
+            "description": "Simple string tokenizer",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/splitString",
+              "input": {
+                "delimiter": "_",
+                "tokenNumber": 3
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$flow.notif_data.vout[0].items[0].name",
+                    "mapTo": "stringToSplit"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "tcmpub_alert",
+            "name": "Send TCM Message",
+            "description": "Sends a message to TIBCO Cloud Messaging",
+            "activity": {
+              "ref": "github.com/jvanderl/flogo-components/activity/tcmpub",
+              "input": {
+                "url": "wss://eu.messaging.cloud.tibco.com/tcm/01BJRKPJDVHBGM966RTZ563F0F/channel",
+                "authkey": "[TCM_KEY]",
+                "clientid": "multichain_notif",
+                "destinationname": "_dest",
+                "destinationvalue": "device_alerts",
+                "messagename": "message",
+                "messagevalue": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "Blockhash": "{{$flow.notif_data.blockhash}}",
+                      "TxID": "{{$flow.notif_data.txid}}",
+                      "DeviceID": "{{$flow.notif_data.vout[0].items[0].keys[0]}}",
+                      "Address": "{{$flow.notif_data.vout[0].items[0].publishers[0]}}",
+                      "Data": "{{$flow.notif_data.vout[0].items[0].data.json}}"
+                    },
+                    "mapTo": "messagevalue"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "tcmpub_clear_alert",
+            "name": "Send TCM Message",
+            "description": "Sends a message to TIBCO Cloud Messaging",
+            "activity": {
+              "ref": "github.com/jvanderl/flogo-components/activity/tcmpub",
+              "input": {
+                "url": "wss://eu.messaging.cloud.tibco.com/tcm/01BJRKPJDVHBGM966RTZ563F0F/channel",
+                "authkey": "[TCM_KEY]",
+                "clientid": "multichain_notif",
+                "destinationname": "_dest",
+                "destinationvalue": "clear_alerts",
+                "messagename": "message",
+                "messagevalue": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$flow.notif_data.vout[0].items[0].keys[0]",
+                    "mapTo": "messagevalue"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "log_item",
+            "name": "Log Publish Content",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "message": null,
+                "flowInfo": "false",
+                "addToFlow": "false"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$flow.notif_data.vout[0].items[0]",
+                    "mapTo": "message"
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "links": [
+          {
+            "from": "log_all",
+            "to": "get_stream_type",
+            "type": "expression",
+            "value": "($flow.notif_data.blockhash != nil) && ($flow.notif_data.vout[0].items[0].type == \"stream\")" 
+          },
+          {
+            "from": "get_stream_type",
+            "to": "log_item",
+            "type": "expression",
+            "value": "$activity[get_stream_type].token == \"alerts\"" 
+          },
+          {
+            "from": "log_item",
+            "to": "tcmpub_alert",
+            "type": "expression",
+            "value": "$flow.notif_data.vout[0].items[0].data.json.AlertTxid == nil"            
+          },
+          {
+            "from": "log_item",
+            "to": "tcmpub_clear_alert",
+            "type": "expression",
+            "value": "$flow.notif_data.vout[0].items[0].data.json.AlertTxid != nil"            
+          }
+        ]
+      }
+    }
+  ]
+}
