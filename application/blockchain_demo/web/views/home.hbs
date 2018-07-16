@@ -1,0 +1,313 @@
+<div id="tabs" class="container">	
+    <ul  class="nav nav-pills">
+		<li class="active">
+            <a  href="#alerts" data-toggle="tab">Alerts</a>
+		</li>
+		<li>
+            <a href="#monitor" data-toggle="tab">Monitoring</a>
+		</li>
+	</ul>
+
+	<div class="tab-content clearfix">
+        <div class="tab-pane active" id="alerts">
+            <div class=divtitle class=row align=center>
+                Alerts Timeline for Device {{devid}}
+            </div>
+            <div id="alerts_timeline"></div>
+            <div id="noalerts" class="nodata" style="display: none;">No Alerts for Device {{devid}}</div>
+	    </div>
+		<div class="tab-pane" id="monitor">
+            <div class=divtitle class=row align=center>
+                Monitoring Data for Device {{devid}}
+            </div>
+            <div id="nomonitor" class="nodata" style="display: none;">No monitoring data available for Device {{devid}}</div>
+            <div class=row>
+                <div class="col-sm-12">
+                    <div id="temperature_chart_container" style="min-width: 310px; margin: 0 auto"></div>
+                </div>
+            </div>
+            <div class=row></div>
+                <div class="col-sm-12">
+                    <div id="humidity_chart_container" style="min-width: 310px; margin: 0 auto"></div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+
+
+
+<script>
+  
+
+var urlParams = new URLSearchParams(window.location.search);
+ var url = '/devicedata/alerts?id=' + urlParams.get('id');
+  fetch(url)
+  .then((resp) => resp.json())
+  .then(function(data) {
+    console.log(data);
+
+    var groupCount = 0;
+    var id = 0;
+    var items = new vis.DataSet();
+    var groups = new vis.DataSet();
+    var groupRecords = {};
+    
+    for (var txid in data) {
+        id++;
+        if (data[txid].rule != undefined) {
+            groupCount++;
+            groups.add({id: groupCount, content: "Alert "+groupCount});
+            groupRecords[txid] = groupCount;
+            var content = "<b>ALERT:</b> " + data[txid].rule;
+            content += '<div align="left"><ul>';
+            for (var datatype in data[txid].data) {
+                content += '<li><b>' + datatype + ':</b> ' + data[txid].data[datatype] + '</li>';
+            }
+            content += '</ul></div>';
+            items.add({
+                id: id,
+                group: groupCount,
+                start: data[txid].time,
+                type: 'box',
+                content: content,
+                className: 'red'
+            });
+
+        } else {
+            items.add({
+                id: id,
+                group: groupRecords[data[txid].alertid],
+                start: data[txid].time,
+                type: 'box',
+                content: "Alert Cleared : " + data[txid].resolution,
+                className: 'green'
+            });
+        }
+    }
+
+    var container = document.getElementById('alerts_timeline');
+    var noalerts_container = document.getElementById('noalerts');
+    if (id == 0) {
+        container.style.display = "none";       
+        noalerts_container.style.display = "block";
+    } else {
+        noalerts_container.style.display = "none";
+        
+        var options = {
+            groupOrder: 'content'  // groupOrder can be a property name or a sorting function
+        };
+
+        var timeline = new vis.Timeline(container);
+        timeline.setOptions(options);
+        timeline.setGroups(groups);
+        timeline.setItems(items);
+    }
+    
+    url = '/devicedata/monitor?id=' + urlParams.get('id');
+    
+    fetch(url)
+    .then((resp) => resp.json())
+    .then(function(data) {
+        console.log(data);
+        var temperature_avgs = [];
+        var temperature_ranges = [];
+        var humidity_avgs = [];
+        var humidity_ranges = [];
+        var idx = 0;
+        
+        for (var txid in data) {
+            temperature_avgs[idx] = [new Date(data[txid].time).getTime(),data[txid].temperature.avg];
+            temperature_ranges[idx] = [new Date(data[txid].time).getTime(),data[txid].temperature.min,data[txid].temperature.max];
+            humidity_avgs[idx] = [new Date(data[txid].time).getTime(),data[txid].humidity.avg];
+            humidity_ranges[idx] = [new Date(data[txid].time).getTime(),data[txid].humidity.min,data[txid].humidity.max];
+            idx++;
+        }
+
+        var container_temperature = document.getElementById('temperature_chart_container');
+        var container_humidity = document.getElementById('humidity_chart_container');
+        var nomonitor_container = document.getElementById('nomonitor');
+        if (idx == 0) {
+            container_temperature.style.display = "none";
+            container_humidity.style.display = "none";       
+            nomonitor_container.style.display = "block";
+        } else {
+            Highcharts.chart('temperature_chart_container', {
+
+                title: {
+                    text: 'Monitored Temperature'
+                },
+
+                xAxis: {
+                    type: 'datetime'
+                },
+
+                yAxis: {
+                    title: {
+                        text: null
+                    },
+                    min: 7.0,
+                    max: 13.0,
+                    plotBands: [{ 
+                        from: 7.0,
+                        to: 9.0,
+                        color: 'rgba(205, 133, 63, 0.3)',
+                        label: {
+                            text: 'Too Low',
+                            style: {
+                                color: '#606060'
+                            }
+                        }
+                    }, { 
+                        from: 9.0,
+                        to: 11.0,
+                        color: 'rgba(191, 228, 117, 0.3)',
+                        label: {
+                            text: 'Normal',
+                            style: {
+                                color: '#606060'
+                                }
+                        }
+                    }, { 
+                        from: 11.0,
+                        to: 13.0,
+                        color: 'rgba(205, 133, 63, 0.3)',
+                        label: {
+                            text: 'Too high',
+                            style: {
+                                color: '#606060'
+                                }
+                        }
+                    }]
+                },
+
+                tooltip: {
+                    crosshairs: true,
+                    shared: true,
+                    valueSuffix: '°C'
+                },
+
+                legend: {
+                },
+
+                series: [{
+                    name: 'Avg Temperature',
+                    data: temperature_avgs,
+                    zIndex: 1,
+                    marker: {
+                        fillColor: 'white',
+                        lineWidth: 2,
+                        lineColor: Highcharts.getOptions().colors[0]
+                    }
+                }, {
+                    name: 'Range',
+                    data: temperature_ranges,
+                    type: 'arearange',
+                    lineWidth: 0,
+                    linkedTo: ':previous',
+                    color: Highcharts.getOptions().colors[0],
+                    fillOpacity: 0.3,
+                    zIndex: 0,
+                    marker: {
+                        enabled: false
+                    }
+                }]
+            });
+
+            Highcharts.chart('humidity_chart_container', {
+
+                title: {
+                    text: 'Monitored Humidity'
+                },
+
+                xAxis: {
+                    type: 'datetime'
+                },
+
+                yAxis: {
+                    title: {
+                        text: null
+                    },
+                    min: 40.0,
+                    max: 70.0,
+                    plotBands: [{ 
+                        from: 40.0,
+                        to: 48.0,
+                        color: 'rgba(205, 133, 63, 0.3)',
+                        label: {
+                            text: 'Too Low',
+                            style: {
+                                color: '#606060'
+                            }
+                        }
+                    }, { 
+                        from: 48.0,
+                        to: 62.0,
+                        color: 'rgba(191, 228, 117, 0.3)',
+                        label: {
+                            text: 'Normal',
+                            style: {
+                                color: '#606060'
+                                }
+                        }
+                    }, { 
+                        from: 62.0,
+                        to: 70.0,
+                        color: 'rgba(205, 133, 63, 0.3)',
+                        label: {
+                            text: 'Too high',
+                            style: {
+                                color: '#606060'
+                                }
+                        }
+                    }]
+                },
+
+                tooltip: {
+                    crosshairs: true,
+                    shared: true,
+                    valueSuffix: '%'
+                },
+
+                legend: {
+                },
+
+                series: [{
+                    name: 'Avg Humidity',
+                    data: humidity_avgs,
+                    zIndex: 1,
+                    marker: {
+                        fillColor: 'white',
+                        lineWidth: 2,
+                        lineColor: Highcharts.getOptions().colors[0]
+                    }
+                }, {
+                    name: 'Range',
+                    data: humidity_ranges,
+                    type: 'arearange',
+                    lineWidth: 0,
+                    linkedTo: ':previous',
+                    color: Highcharts.getOptions().colors[0],
+                    fillOpacity: 0.3,
+                    zIndex: 0,
+                    marker: {
+                        enabled: false
+                    }
+                }]
+            });
+        }
+
+    })
+    .catch(function(error) {
+        console.log(JSON.stringify(error));
+    });   
+
+
+  })
+  .catch(function(error) {
+    console.log(JSON.stringify(error));
+  });   
+
+
+</script>
+

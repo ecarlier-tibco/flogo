@@ -1,0 +1,26 @@
+{
+    "Config": {
+        "Parameters": [
+            {
+                "Name" : "Latitude",
+                "Type" : "number",
+                "Value": 48.875682
+            },
+	        {
+                "Name" : "Longitude",
+                "Type" : "number",
+                "Value": 2.302404
+            },
+            {
+                "Name" : "CustomerID",
+                "Type" : "string",
+                "Value": "TIBCO"
+            },
+            {
+                "Name" : "SiteName",
+                "Type" : "string",
+                "Value": "BALZAC"
+            }
+        ]
+    }
+}

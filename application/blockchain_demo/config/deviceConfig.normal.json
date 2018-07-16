@@ -1,0 +1,51 @@
+{
+    "Config": {
+        "Parameters": [
+            {
+                "Name" : "DeviceID",
+                "Type" : "string",
+                "Value": "DEV01"
+            },
+            {
+                "Name" : "CustomerID",
+                "Type" : "string",
+                "Value": "TIBCO"
+            },
+            {
+                "Name" : "SiteName",
+                "Type" : "string",
+                "Value": "BALZAC"
+            },
+            {
+                "Name" : "TemperatureMin",
+                "Type" : "number",
+                "Value": 9.5
+            },
+            {
+                "Name" : "TemperatureMean",
+                "Type" : "number",
+                "Value": 10.0
+            },
+            {
+                "Name" : "TemperatureMax",
+                "Type" : "number",
+                "Value": 10.5
+            },
+            {
+                "Name" : "HumidityMin",
+                "Type" : "number",
+                "Value": 50.0
+            },
+            {
+                "Name" : "HumidityMean",
+                "Type" : "number",
+                "Value": 55.0
+            },
+            {
+                "Name" : "HumidityMax",
+                "Type" : "number",
+                "Value": 60.0
+            }
+        ]
+    }
+}
