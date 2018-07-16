@@ -1,0 +1,1276 @@
+{
+  "name": "MasterApp",
+  "type": "flogo:app",
+  "version": "0.0.1",
+  "appModel": "1.0.0",
+  "triggers": [
+    {
+      "id": "receive_http_message",
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/rest",
+      "name": "Receive HTTP Message",
+      "description": "Simple REST Trigger",
+      "settings": {
+        "port": "8888"
+      },
+      "handlers": [
+        {
+          "action": {
+            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+            "data": {
+              "flowURI": "res://flow:new_site"
+            },
+            "mappings": {
+              "input": [
+                {
+                  "mapTo": "Site",
+                  "type": "assign",
+                  "value": "$.content"
+                }
+              ],
+              "output": [
+                {
+                  "mapTo": "code",
+                  "type": "expression",
+                  "value": "$.Success ? 200 : 500"
+                },
+                {
+                  "mapTo": "data",
+                  "type": "object",
+                  "value": {
+                    "Result": "{{$.ResultMessage}}"
+                  }
+                }
+              ]
+            }
+          },
+          "settings": {
+            "method": "POST",
+            "path": "/site"
+          }
+        },
+        {
+          "action": {
+            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+            "data": {
+              "flowURI": "res://flow:query_device"
+            },
+            "mappings": {
+              "input": [
+                {
+                  "mapTo": "Device",
+                  "type": "assign",
+                  "value": "$.queryParams.id"
+                }
+              ],
+              "output": [
+                {
+                  "mapTo": "code",
+                  "type": "expression",
+                  "value": "$.Success ? 200 : 500"
+                },
+                {
+                  "mapTo": "data",
+                  "type": "assign",
+                  "value": "$.Result"
+                }
+              ]
+            }
+          },
+          "settings": {
+            "method": "GET",
+            "path": "/device"
+          }
+        },
+        {
+          "action": {
+            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+            "data": {
+              "flowURI": "res://flow:query_blockchain"
+            },
+            "mappings": {
+              "input": [
+                {
+                  "mapTo": "Customer",
+                  "type": "expression",
+                  "value": "$.queryParams.customer != nil ? $.queryParams.customer : \"NotSet\""
+                },
+                {
+                  "mapTo": "Site",
+                  "type": "expression",
+                  "value": "$.queryParams.site != nil ? $.queryParams.site : \"NotSet\""
+                },
+                {
+                  "mapTo": "Device",
+                  "type": "expression",
+                  "value": "$.queryParams.device != nil ? $.queryParams.device : \"NotSet\""
+                },
+                {
+                  "mapTo": "Type",
+                  "type": "expression",
+                  "value": "$.queryParams.type != nil ? $.queryParams.type : \"alerts\""
+                }
+              ],
+              "output": [
+                {
+                  "mapTo": "code",
+                  "type": "expression",
+                  "value": "$.Success ? 200 : 500"
+                },
+                {
+                  "mapTo": "data",
+                  "type": "assign",
+                  "value": "$.Result"
+                }
+              ]
+            }
+          },
+          "settings": {
+            "method": "GET",
+            "path": "/devicedata"
+          }
+        },
+        {
+          "action": {
+            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+            "data": {
+              "flowURI": "res://flow:clear_alert"
+            },
+            "mappings": {
+              "input": [
+                {
+                  "mapTo": "Device",
+                  "type": "assign",
+                  "value": "$.content.DeviceID"
+                },
+                {
+                  "mapTo": "AlertTxid",
+                  "type": "assign",
+                  "value": "$.content.AlertTxid"
+                },
+                {
+                  "mapTo": "Resolution",
+                  "type": "assign",
+                  "value": "$.content.Resolution"
+                }
+              ],
+              "output": [
+                {
+                  "mapTo": "code",
+                  "type": "expression",
+                  "value": "$.Success ? 200 : 500"
+                },
+                {
+                  "mapTo": "data",
+                  "type": "object",
+                  "value": {
+                    "Result": "{{$.ResultMessage}}"
+                  }
+                }
+              ]
+            }
+          },
+          "settings": {
+            "method": "PUT",
+            "path": "/clearAlert"
+          }
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "flow:new_site",
+      "data": {
+        "name": "new_site",
+        "metadata": {
+          "input": [
+            {
+              "name": "Site",
+              "type": "object"
+            }
+          ],
+          "output": [
+            {
+              "name": "Success",
+              "type": "boolean"
+            },
+            {
+              "name": "ResultMessage",
+              "type": "string"
+            }
+          ]
+        },
+        "tasks": [
+          {
+            "id": "dynamodbquery_2",
+            "name": "DynamoDB Query",
+            "description": "Query objects from Amazon DynamoDB",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo-components/activity/dynamodbquery",
+              "input": {
+                "awsAccessKeyID": "AKIAJLNUGTU5NYMVBVXA",
+                "awsSecretAccessKey": "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",
+                "awsRegion": "eu-west-1",
+                "dynamoDBTableName": "Customer",
+                "dynamoDBIndexName": null,
+                "dynamoDBKeyConditionExpression": "ID = :customerID",
+                "dynamoDBFilterExpression": "",
+                "dynamoDBExpressionAttributes": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": {
+                      ":customerID": "{{$flow.Site.CustomerID}}"
+                    },
+                    "mapTo": "dynamoDBExpressionAttributes"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "dynamodbinsert_4",
+            "name": "DynamoDB Insert ERC",
+            "description": "Insert an object into Amazon DynamoDB",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo-components/activity/dynamodbinsert",
+              "input": {
+                "awsAccessKeyID": "AKIAJLNUGTU5NYMVBVXA",
+                "awsSecretAccessKey": "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",
+                "awsRegion": "eu-west-1",
+                "DynamoDBTableName": "Site",
+                "DynamoDBRecord": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$flow.Site",
+                    "mapTo": "DynamoDBRecord"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "actreturn_5",
+            "name": "Return (2)",
+            "description": "Simple Return Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/actreturn",
+              "input": {
+                "mappings": [
+                  {
+                    "mapTo": "ResultMessage",
+                    "type": "literal",
+                    "value": "Error inserting site in DB"
+                  },
+                  {
+                    "mapTo": "Success",
+                    "type": "literal",
+                    "value": false
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "return_success",
+            "name": "Return (3)",
+            "description": "Simple Return Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/actreturn",
+              "input": {
+                "mappings": [
+                  {
+                    "mapTo": "ResultMessage",
+                    "type": "literal",
+                    "value": "OK"
+                  },
+                  {
+                    "mapTo": "Success",
+                    "type": "literal",
+                    "value": true
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "actreturn_3",
+            "name": "Return",
+            "description": "Simple Return Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/actreturn",
+              "input": {
+                "mappings": [
+                  {
+                    "mapTo": "ResultMessage",
+                    "type": "expression",
+                    "value": "string.concat(\"Customer [\", $flow.Site.CustomerID, \"] Unknown\")"
+                  },
+                  {
+                    "mapTo": "Success",
+                    "type": "literal",
+                    "value": false
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "grant_site_node",
+            "name": "GrantSiteNode",
+            "description": "Grant new site's multichain node",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/multichain",
+              "input": {
+                "chain": "demochain",
+                "host": "localhost",
+                "port": "6284",
+                "rpcuser": "multichainrpc",
+                "rpcpassword": "3bj4Bp1JjbLJrAMoAJFtAa853Xs6Tc55783EzaVnV2C4",
+                "command": "grant",
+                "parameters": null,
+                "jsonData": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "addresses": "{{$flow.Site.BlockchainAddress}}",
+                      "permissions": "connect,send"
+                    },
+                    "mapTo": "parameters"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "set_stream_monitor",
+            "name": "SetStreamMonitor",
+            "description": "Map string",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/passthru",
+              "input": {},
+              "mappings": {
+                "input": [
+                  {
+                    "type": "expression",
+                    "value": "string.concat($flow.Site.CustomerID, \"_\", $flow.Site.SiteName,\"_monitor\")",
+                    "mapTo": "input"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "create_monitor_stream",
+            "name": "CreateDeviceMonitorStream",
+            "description": "Create Stream on multichain for devices on site to send periodic monitoring data",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/multichain",
+              "input": {
+                "chain": "demochain",
+                "host": "localhost",
+                "port": "6284",
+                "rpcuser": "multichainrpc",
+                "rpcpassword": "3bj4Bp1JjbLJrAMoAJFtAa853Xs6Tc55783EzaVnV2C4",
+                "command": "create",
+                "parameters": null,
+                "jsonData": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "type": "stream",
+                      "name": "{{$activity[set_stream_monitor].result}}"
+                    },
+                    "mapTo": "parameters"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "subscribe_monitor_stream",
+            "name": "SubscribeDeviceMonitorStream",
+            "description": "Subscribe Stream on multichain for devices on site to send periodic monitoring data",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/multichain",
+              "input": {
+                "chain": "demochain",
+                "host": "localhost",
+                "port": "6284",
+                "rpcuser": "multichainrpc",
+                "rpcpassword": "3bj4Bp1JjbLJrAMoAJFtAa853Xs6Tc55783EzaVnV2C4",
+                "command": "subscribe",
+                "parameters": null,
+                "jsonData": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "stream": "{{$activity[set_stream_monitor].result}}"
+                    },
+                    "mapTo": "parameters"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "set_stream_alerts",
+            "name": "SetStreamAlerts",
+            "description": "Map string",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/passthru",
+              "input": {},
+              "mappings": {
+                "input": [
+                  {
+                    "type": "expression",
+                    "value": "string.concat($flow.Site.CustomerID, \"_\", $flow.Site.SiteName,\"_alerts\")",
+                    "mapTo": "input"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "create_alerts_stream",
+            "name": "CreateDeviceAlertsStream",
+            "description": "Create Stream on multichain for devices on site to send alerts",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/multichain",
+              "input": {
+                "chain": "demochain",
+                "host": "localhost",
+                "port": "6284",
+                "rpcuser": "multichainrpc",
+                "rpcpassword": "3bj4Bp1JjbLJrAMoAJFtAa853Xs6Tc55783EzaVnV2C4",
+                "command": "create",
+                "parameters": null,
+                "jsonData": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "type": "stream",
+                      "name": "{{$activity[set_stream_alerts].result}}"
+                    },
+                    "mapTo": "parameters"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "subscribe_alerts_stream",
+            "name": "SubscribeDeviceAlertsStream",
+            "description": "Subscribe Stream on multichain for devices on site to send alerts",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/multichain",
+              "input": {
+                "chain": "demochain",
+                "host": "localhost",
+                "port": "6284",
+                "rpcuser": "multichainrpc",
+                "rpcpassword": "3bj4Bp1JjbLJrAMoAJFtAa853Xs6Tc55783EzaVnV2C4",
+                "command": "subscribe",
+                "parameters": null,
+                "jsonData": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "stream": "{{$activity[set_stream_alerts].result}}"
+                    },
+                    "mapTo": "parameters"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "set_monitor_permissions",
+            "name": "SetMonitorPermissions",
+            "description": "Map string",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/passthru",
+              "input": {},
+              "mappings": {
+                "input": [
+                  {
+                    "type": "expression",
+                    "value": "string.concat($flow.Site.CustomerID, \"_\", $flow.Site.SiteName,\"_monitor.write\")",
+                    "mapTo": "input"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "grant_monitor_permissions",
+            "name": "GrantMonitorPermissions",
+            "description": "Grant permissions for site on newly created streams",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/multichain",
+              "input": {
+                "chain": "demochain",
+                "host": "localhost",
+                "port": "6284",
+                "rpcuser": "multichainrpc",
+                "rpcpassword": "3bj4Bp1JjbLJrAMoAJFtAa853Xs6Tc55783EzaVnV2C4",
+                "command": "grant",
+                "parameters": null,
+                "jsonData": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "addresses": "{{$flow.Site.BlockchainAddress}}",
+                      "permissions": "{{$activity[set_monitor_permissions].result}}"
+                    },
+                    "mapTo": "parameters"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "set_alerts_permissions",
+            "name": "SetAlertsPermissions",
+            "description": "Map string",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/passthru",
+              "input": {},
+              "mappings": {
+                "input": [
+                  {
+                    "type": "expression",
+                    "value": "string.concat($flow.Site.CustomerID, \"_\", $flow.Site.SiteName,\"_alerts.write\")",
+                    "mapTo": "input"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "grant_alerts_permissions",
+            "name": "GrantAlertsPermissions",
+            "description": "Grant permissions for site on newly created streams",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/multichain",
+              "input": {
+                "chain": "demochain",
+                "host": "localhost",
+                "port": "6284",
+                "rpcuser": "multichainrpc",
+                "rpcpassword": "3bj4Bp1JjbLJrAMoAJFtAa853Xs6Tc55783EzaVnV2C4",
+                "command": "grant",
+                "parameters": null,
+                "jsonData": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "addresses": "{{$flow.Site.BlockchainAddress}}",
+                      "permissions": "{{$activity[set_alerts_permissions].result}}"
+                    },
+                    "mapTo": "parameters"
+                  }
+                ]
+              }
+            }
+          }
+       ],
+        "links": [
+          {
+            "from": "dynamodbquery_2",
+            "to": "dynamodbinsert_4",
+            "type": "expression",
+            "value": "$activity[dynamodbquery_2].scannedCount > 0"
+          },
+          {
+            "from": "dynamodbinsert_4",
+            "to": "actreturn_5",
+            "type": "expression",
+            "value": "$activity[dynamodbinsert_4].result == \"ERROR\""
+          },
+          {
+            "from": "dynamodbinsert_4",
+            "to": "grant_site_node",
+            "type": "expression",
+            "value": "$activity[dynamodbinsert_4].result != \"ERROR\""
+          },
+          {
+            "from": "grant_site_node",
+            "to": "set_stream_monitor"
+          },
+          {
+            "from": "set_stream_monitor",
+            "to": "create_monitor_stream"
+          },
+          {
+            "from": "create_monitor_stream",
+            "to": "subscribe_monitor_stream"
+          },     
+          {
+            "from": "subscribe_monitor_stream",
+            "to": "set_stream_alerts"
+          },
+          {
+            "from": "set_stream_alerts",
+            "to": "create_alerts_stream"
+          },
+          {
+            "from": "create_alerts_stream",
+            "to": "subscribe_alerts_stream"
+          },     
+          {
+            "from": "subscribe_alerts_stream",
+            "to": "set_monitor_permissions"
+          },
+          {
+            "from": "set_monitor_permissions",
+            "to": "grant_monitor_permissions"
+          },
+          {
+            "from": "grant_monitor_permissions",
+            "to": "set_alerts_permissions"
+          },
+          {
+            "from": "set_alerts_permissions",
+            "to": "grant_alerts_permissions"
+          },
+          {
+            "from": "grant_alerts_permissions",
+            "to": "return_success"
+          },
+          {
+            "from": "dynamodbquery_2",
+            "to": "actreturn_3",
+            "type": "expression",
+            "value": "$activity[dynamodbquery_2].scannedCount == 0"
+          }
+        ]
+      }
+    },
+    {
+      "id": "flow:query_blockchain",
+      "data": {
+        "name": "query_blockchain",
+        "metadata": {
+          "input": [
+            {
+              "name": "Customer",
+              "type": "string"
+            },
+            {
+              "name": "Site",
+              "type": "string"
+            },
+            {
+              "name": "Device",
+              "type": "string"
+            },
+            {
+              "name": "Type",
+              "type": "string"
+            }
+          ],
+          "output": [
+            {
+              "name": "Success",
+              "type": "boolean"
+            },
+            {
+              "name": "Result",
+              "type": "array"
+            }
+          ]
+        },
+        "tasks": [
+          {
+            "id": "log_received",
+            "name": "LogReceivedData",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "flowInfo": "false",
+                "addToFlow": "false"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "expression",
+                    "value": "string.concat($flow.Customer, \"|\", $flow.Site, \"|\",$flow.Device, \"|\",$flow.Type)",
+                    "mapTo": "message"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "return_missing",
+            "name": "return error missing",
+            "description": "Return error on missing parameter",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/actreturn",
+              "input": {
+                "mappings": [
+                  {
+                    "mapTo": "Result",
+                    "type": "object",
+                    "value": [{
+                      "ErrorMessage": "Error : missing parameter in query"
+                    }]
+                  },
+                  {
+                    "mapTo": "Success",
+                    "type": "literal",
+                    "value": false
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "set_stream_name",
+            "name": "SetStreamMonitor",
+            "description": "Map string",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/passthru",
+              "input": {},
+              "mappings": {
+                "input": [
+                  {
+                    "type": "expression",
+                    "value": "string.concat($flow.Customer, \"_\", $flow.Site,\"_\",$flow.Type)",
+                    "mapTo": "input"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "get_stream_items",
+            "name": "GetStreamItems",
+            "description": "get all items from site's alerts stream",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/multichain",
+              "input": {
+                "chain": "demochain",
+                "host": "localhost",
+                "port": "6284",
+                "rpcuser": "multichainrpc",
+                "rpcpassword": "3bj4Bp1JjbLJrAMoAJFtAa853Xs6Tc55783EzaVnV2C4",
+                "command": "liststreamitems",
+                "parameters": null,
+                "jsonData": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "stream": "{{$activity[set_stream_name].result}}"
+                    },
+                    "mapTo": "parameters"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "get_key_items",
+            "name": "GetKeyItems",
+            "description": "get all items from a specific device from site's alerts or monitor stream",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/multichain",
+              "input": {
+                "chain": "demochain",
+                "host": "localhost",
+                "port": "6284",
+                "rpcuser": "multichainrpc",
+                "rpcpassword": "3bj4Bp1JjbLJrAMoAJFtAa853Xs6Tc55783EzaVnV2C4",
+                "command": "liststreamkeyitems",
+                "parameters": null,
+                "jsonData": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "stream": "{{$activity[set_stream_name].result}}",
+                      "key":"{{$flow.Device}}"
+                    },
+                    "mapTo": "parameters"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "return_ok_nokey",
+            "name": "return ok",
+            "description": "Return OK",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/actreturn",
+              "input": {
+                "mappings": [
+                  {
+                    "mapTo": "Result",
+                    "type": "assign",
+                    "value": "$activity[get_stream_items].response"
+                  },
+                  {
+                    "mapTo": "Success",
+                    "type": "literal",
+                    "value": true
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "return_ok_withkey",
+            "name": "return ok",
+            "description": "Return OK",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/actreturn",
+              "input": {
+                "mappings": [
+                  {
+                    "mapTo": "Result",
+                    "type": "assign",
+                    "value": "$activity[get_key_items].response"
+                  },
+                  {
+                    "mapTo": "Success",
+                    "type": "literal",
+                    "value": true
+                  }
+                ]
+              }
+            }
+          }
+      ],
+        "links": [
+          {
+            "from": "log_received",
+            "to": "return_missing",
+            "type": "expression",
+            "value": "(($flow.Customer == \"NotSet\") || ($flow.Site == \"NotSet\")) || (($flow.Device == \"NotSet\") && ($flow.Type == \"monitor\"))"
+          },
+          {
+            "from": "log_received",
+            "to": "set_stream_name",
+            "type": "expression",
+            "value": "(($flow.Customer != \"NotSet\") && ($flow.Site != \"NotSet\")) && ((($flow.Device != \"NotSet\") && ($flow.Type == \"monitor\")) || ($flow.Type == \"alerts\"))"
+          },
+          {
+            "from": "set_stream_name",
+            "to": "get_stream_items",
+            "type": "expression",
+            "value": "$flow.Device == \"NotSet\""
+          },
+          {
+            "from": "set_stream_name",
+            "to": "get_key_items",
+            "type": "expression",
+            "value": "$flow.Device != \"NotSet\""
+          },
+          {
+            "from": "get_key_items",
+            "to": "return_ok_withkey"
+          },
+          {
+            "from": "get_stream_items",
+            "to": "return_ok_nokey"
+          }
+        ]
+      }
+    },
+    {
+      "id": "flow:query_device",
+      "data": {
+        "name": "query_device",
+        "metadata": {
+          "input": [
+            {
+              "name": "Device",
+              "type": "string"
+            }
+          ],
+          "output": [
+            {
+              "name": "Success",
+              "type": "boolean"
+            },
+            {
+              "name": "Result",
+              "type": "object"
+            }
+          ]
+        },
+        "tasks": [
+          {
+            "id": "log_received",
+            "name": "LogReceivedData",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "flowInfo": "false",
+                "addToFlow": "false"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "expression",
+                    "value": "string.concat(\"Query Device \",$flow.Device)",
+                    "mapTo": "message"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "query_device",
+            "name": "DynamoDB Query",
+            "description": "Query objects from Amazon DynamoDB",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo-components/activity/dynamodbquery",
+              "input": {
+                "awsAccessKeyID": "AKIAJLNUGTU5NYMVBVXA",
+                "awsSecretAccessKey": "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",
+                "awsRegion": "eu-west-1",
+                "dynamoDBTableName": "Device",
+                "dynamoDBIndexName": null,
+                "dynamoDBKeyConditionExpression": "ID = :deviceID",
+                "dynamoDBFilterExpression": null,
+                "dynamoDBExpressionAttributes": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": {
+                      ":deviceID": "{{$flow.Device}}"
+                    },
+                    "mapTo": "dynamoDBExpressionAttributes"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "log_site",
+            "name": "LogReceivedData",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "flowInfo": "false",
+                "addToFlow": "false"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$activity[query_device].result[0]",
+                    "mapTo": "message"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "query_site",
+            "name": "DynamoDB Query",
+            "description": "Query objects from Amazon DynamoDB",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo-components/activity/dynamodbquery",
+              "input": {
+                "awsAccessKeyID": "AKIAJLNUGTU5NYMVBVXA",
+                "awsSecretAccessKey": "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",
+                "awsRegion": "eu-west-1",
+                "dynamoDBTableName": "Site",
+                "dynamoDBIndexName": null,
+                "dynamoDBKeyConditionExpression": "SiteName = :site_name",
+                "dynamoDBFilterExpression": "",
+                "dynamoDBExpressionAttributes": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": {
+                      ":site_name":  "{{$activity[query_device].result[0].SiteName}}"
+                    },
+                    "mapTo": "dynamoDBExpressionAttributes"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "return_data",
+            "name": "return queried data",
+            "description": "Return queried data",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/actreturn",
+              "input": {
+                "mappings": [
+                  {
+                    "mapTo": "Result",
+                    "type": "object",
+                    "value": {
+                      "Device": "{{$activity[query_device].result[0]}}",
+                      "Site": "{{$activity[query_site].result[0]}}"
+                    }
+                  },
+                  {
+                    "mapTo": "Success",
+                    "type": "literal",
+                    "value": true
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "links": [
+          {
+            "from": "log_received",
+            "to": "query_device"
+          },
+          {
+            "from": "query_device",
+            "to": "log_site"
+          },
+          {
+            "from": "log_site",
+            "to": "query_site"
+          },
+          {
+            "from": "query_site",
+            "to": "return_data"
+          }
+        ]
+      }
+    },
+    {
+      "id": "flow:clear_alert",
+      "data": {
+        "name": "clear_alert",
+        "metadata": {
+          "input": [
+            {
+              "name": "Device",
+              "type": "string"
+            },
+            {
+              "name": "AlertTxid",
+              "type": "string"
+            },
+            {
+              "name": "Resolution",
+              "type": "string"
+            } 
+          ],
+          "output": [
+            {
+              "name": "Success",
+              "type": "boolean"
+            },
+            {
+              "name": "ResultMessage",
+              "type": "string"
+            }
+          ]
+        },
+        "tasks": [
+          {
+            "id": "query_device",
+            "name": "DynamoDB Query",
+            "description": "Query objects from Amazon DynamoDB",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo-components/activity/dynamodbquery",
+              "input": {
+                "awsAccessKeyID": "AKIAJLNUGTU5NYMVBVXA",
+                "awsSecretAccessKey": "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",
+                "awsRegion": "eu-west-1",
+                "dynamoDBTableName": "Device",
+                "dynamoDBIndexName": null,
+                "dynamoDBKeyConditionExpression": "ID = :deviceID",
+                "dynamoDBFilterExpression": null,
+                "dynamoDBExpressionAttributes": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": {
+                      ":deviceID": "{{$flow.Device}}"
+                    },
+                    "mapTo": "dynamoDBExpressionAttributes"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "dynamodb_updatedevice",
+            "name": "DynamoDB put",
+            "description": "Insert an object into Amazon DynamoDB",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo-components/activity/dynamodbinsert",
+              "input": {
+                "awsAccessKeyID": "AKIAJLNUGTU5NYMVBVXA",
+                "awsSecretAccessKey": "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",
+                "awsRegion": "eu-west-1",
+                "DynamoDBTableName": "Device",
+                "DynamoDBRecord": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "ID": "{{$flow.Device}}",
+                      "AlertState": false,
+                      "CustomerID": "{{$activity[query_device].result[0].CustomerID}}",
+                      "Latitude": "{{$activity[query_device].result[0].Latitude}}",
+                      "Longitude": "{{$activity[query_device].result[0].Longitude}}",
+                      "MeasureTypes": "{{$activity[query_device].result[0].MeasureTypes}}",
+                      "SiteName": "{{$activity[query_device].result[0].SiteName}}"
+                    
+                    },
+                    "mapTo": "DynamoDBRecord"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "set_stream_alerts",
+            "name": "SetStreamAlerts",
+            "description": "Map string",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/passthru",
+              "input": {},
+              "mappings": {
+                "input": [
+                  {
+                    "type": "expression",
+                    "value": "string.concat($activity[query_device].result[0].CustomerID, \"_\", $activity[query_device].result[0].SiteName,\"_alerts\")",
+                    "mapTo": "input"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "clear_alert",
+            "name": "ClearAlert",
+            "description": "Create entry on alert multichain stream to notify clearance",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/multichain",
+              "input": {
+                "chain": "demochain",
+                "host": "localhost",
+                "port": "6284",
+                "rpcuser": "multichainrpc",
+                "rpcpassword": "3bj4Bp1JjbLJrAMoAJFtAa853Xs6Tc55783EzaVnV2C4",
+                "command": "publish",
+                "parameters": null,
+                "jsonData": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "stream": "{{$activity[set_stream_alerts].result}}",
+                      "key": "{{$flow.Device}}"
+                    },
+                    "mapTo": "parameters"
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "AlertTxid": "{{$flow.AlertTxid}}",
+                      "Resolution": "{{$flow.Resolution}}"
+                    },
+                    "mapTo": "jsonData"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "return_success",
+            "name": "Return (3)",
+            "description": "Simple Return Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/actreturn",
+              "input": {
+                "mappings": [
+                  {
+                    "mapTo": "ResultMessage",
+                    "type": "literal",
+                    "value": "OK"
+                  },
+                  {
+                    "mapTo": "Success",
+                    "type": "literal",
+                    "value": true
+                  }
+                ]
+              }
+            }
+          }
+       ],
+        "links": [
+          {
+            "from": "query_device",
+            "to": "dynamodb_updatedevice"
+          },
+          {
+            "from": "dynamodb_updatedevice",
+            "to": "set_stream_alerts"
+          },
+          {
+            "from": "set_stream_alerts",
+            "to": "clear_alert"
+          },
+          {
+            "from": "clear_alert",
+            "to": "return_success"
+          }
+        ]
+      }
+    }
+  ]
+}

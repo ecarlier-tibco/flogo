@@ -1,0 +1,696 @@
+{
+  "name": "DeviceApp",
+  "type": "flogo:app",
+  "version": "0.0.1",
+  "appModel": "1.0.0",
+  "triggers": [
+    {
+      "id": "timer",
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/timer",
+      "name": "Timer",
+      "description": "Simple Timer trigger",
+      "settings": {},
+      "handlers": [
+        {
+          "action": {
+            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+            "data": {
+              "flowURI": "res://flow:registration"
+            }
+          },
+          "settings": {
+            "repeating": "false",
+            "notImmediate": "false",
+            "startDate": null,
+            "hours": null,
+            "minutes": "",
+            "seconds": ""
+          }
+        },
+        {
+          "action": {
+            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+            "data": {
+              "flowURI": "res://flow:data_flow"
+            }
+          },
+          "settings": {
+            "repeating": "true",
+            "notImmediate": "false",
+            "startDate": "2018-01-01T12:00:00Z00:00",
+            "hours": null,
+            "minutes": "",
+            "seconds": "1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "receive_tcm_message",
+      "ref": "github.com/jvanderl/flogo-components/trigger/tcmsub",
+      "name": "Receive HTTP Message",
+      "description": "TCM Clear Alert Subscriber",
+      "settings": {
+        "url": "wss://eu.messaging.cloud.tibco.com/tcm/01BJRKPJDVHBGM966RTZ563F0F/channel",
+        "authkey": "1e18a41c03d4718eea69a449c80e9c80",
+        "clientid": "clear-alerts-subscriber"
+      },
+      "handlers": [
+        {
+          "action": {
+            "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow",
+            "data": {
+              "flowURI": "res://flow:clear_alerts"
+            },
+            "mappings": {
+              "input": [
+                {
+                  "mapTo": "Device",
+                  "type": "assign",
+                  "value": "$.message"
+                }
+              ],
+              "output": [
+              ]
+            }
+          },
+          "settings": {
+            "destinationname": "_dest",
+            "destinationmatch": "clear_alerts",
+            "messagename": "message",
+            "durable": "true",
+            "durablename": "device-clear-alerts"
+          }
+        }
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "id": "flow:registration",
+      "data": {
+        "name": "Registration",
+        "tasks": [
+          {
+            "id": "log_2",
+            "name": "LogStart",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "message": "Starting Device Registration Process ...",
+                "flowInfo": "false",
+                "addToFlow": "false"
+              }
+            }
+          },
+          {
+            "id": "readConfig_3",
+            "name": "Read a json configuration file",
+            "description": "Read a configuration file and stores config params and values as global parameters",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/readConfig",
+              "input": {
+                "configFile": "./deviceConfig.init.json"
+              }
+            }
+          },
+          {
+            "id": "master_pub",
+            "name": "PublishToMaster",
+            "description": "Publish new device registration data to maintenance provider",
+            "activity": {
+              "ref": "github.com/jvanderl/flogo-components/activity/tcmpub",
+              "input": {
+                "url": "wss://eu.messaging.cloud.tibco.com/tcm/01BJRKPJDVHBGM966RTZ563F0F/channel",
+                "authkey": "3c3963ca9cf4cf762e13e98060986f82",
+                "clientid": "flogo_app",
+                "destinationname": "_dest",
+                "destinationvalue": "device_registration",
+                "messagename": "message"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "ID": "{{$activity[readConfig_3].configData.DeviceID}}",
+                      "Latitude": "{{$activity[readConfig_3].configData.Latitude}}",
+                      "Longitude": "{{$activity[readConfig_3].configData.Longitude}}",
+                      "CustomerID": "{{$activity[readConfig_3].configData.CustomerID}}",
+                      "SiteName": "{{$activity[readConfig_3].configData.SiteName}}",
+                      "MeasureTypes": "{{$activity[readConfig_3].configData.MeasureTypes}}",
+                      "AlertState": false
+                    },
+                    "mapTo": "messagevalue"
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "links": [
+          {
+            "from": "log_2",
+            "to": "readConfig_3"
+          },
+          {
+            "from": "readConfig_3",
+            "to": "master_pub"
+          }
+        ]
+      }
+    },
+    {
+      "id": "flow:data_flow",
+      "data": {
+        "name": "DataFlow",
+        "tasks": [
+          {
+            "id": "config",
+            "name": "Read a json configuration file",
+            "description": "Read a configuration file and stores config params and values as global parameters",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/readConfig",
+              "input": {
+                "configFile": "./deviceConfig.json"
+              }
+            }
+          },
+          {
+            "id": "temperature",
+            "name": "Temperature",
+            "description": "generating random number values with a given distribution",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/numdatasim",
+              "input": {
+                "distributionType": "Uniform",
+                "repeatSequence": false,
+                "sigma": 0,
+                "mode": 0,
+                "lambda": 0
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$activity[config].configData.TemperatureMin",
+                    "mapTo": "min"
+                  },
+                  {
+                    "type": "assign",
+                    "value": "$activity[config].configData.TemperatureMax",
+                    "mapTo": "max"
+                  },
+                  {
+                    "type": "assign",
+                    "value": "$activity[config].configData.TemperatureMean",
+                    "mapTo": "mean"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "humidity",
+            "name": "Humidity",
+            "description": "generating random number values with a given distribution",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/numdatasim",
+              "input": {
+                "distributionType": "Uniform",
+                "repeatSequence": false,
+               "sigma": 0,
+                "mode": 0,
+                "lambda": 0
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$activity[config].configData.HumidityMin",
+                    "mapTo": "min"
+                  },
+                  {
+                    "type": "assign",
+                    "value": "$activity[config].configData.HumidityMax",
+                    "mapTo": "max"
+                  },
+                  {
+                    "type": "assign",
+                    "value": "$activity[config].configData.HumidityMean",
+                    "mapTo": "mean"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "aggregate_t",
+            "name": "AggregateTemperature",
+            "description": "Simple Aggregator Activity, min and max added for time block",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/ercaggregate",
+              "input": {
+                "function": null,
+                "windowSize": 5000,
+                "value": 0
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": [
+                      "avg",
+                      "min",
+                      "max"
+                    ],
+                    "mapTo": "functions"
+                  },
+                  {
+                    "type": "literal",
+                    "value": "sizeblock",
+                    "mapTo": "windowType"
+                  },
+                  {
+                    "type": "assign",
+                    "value": "$activity[temperature].output",
+                    "mapTo": "value"
+                  },
+                  {
+                    "type": "literal",
+                    "value": 20,
+                    "mapTo": "windowSize"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "aggregate_h",
+            "name": "AggregateHumidity",
+            "description": "Simple Aggregator Activity, min and max added for time block",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/ercaggregate",
+              "input": {
+                "function": null,
+                "windowSize": 5000,
+                "value": 0
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": [
+                      "avg",
+                      "min",
+                      "max"
+                    ],
+                    "mapTo": "functions"
+                  },
+                  {
+                    "type": "literal",
+                    "value": "sizeblock",
+                    "mapTo": "windowType"
+                  },
+                  {
+                    "type": "assign",
+                    "value": "$activity[humidity].output",
+                    "mapTo": "value"
+                  },
+                  {
+                    "type": "literal",
+                    "value": 20,
+                    "mapTo": "windowSize"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "log_t",
+            "name": "LogTemperature",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "message": "",
+                "flowInfo": "false",
+                "addToFlow": "false"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$activity[aggregate_t].result",
+                    "mapTo": "message"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "log_h",
+            "name": "LogHumidity",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "message": "",
+                "flowInfo": "false",
+                "addToFlow": "false"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "assign",
+                    "value": "$activity[aggregate_h].result",
+                    "mapTo": "message"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "get_alert_state",
+            "name": "GetAlertState",
+            "description": "Get Alert State",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/app",
+              "input": {
+                "attribute": "ALERT_STATE",
+                "operation": "GET",
+                "type": "boolean"
+              }
+            }
+          },
+          {
+            "id": "set_stream_alerts",
+            "name": "SetStreamAlerts",
+            "description": "Map string",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/passthru",
+              "input": {},
+              "mappings": {
+                "input": [
+                  {
+                    "type": "expression",
+                    "value": "string.concat($activity[config].configData.CustomerID, \"_\", $activity[config].configData.SiteName,\"_alerts\")",
+                    "mapTo": "input"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "raise_alert",
+            "name": "RaiseAlert",
+            "description": "Create entry on alert multichain stream",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/multichain",
+              "input": {
+                "chain": "demochain",
+                "host": "localhost",
+                "port": "6284",
+                "rpcuser": "multichainrpc",
+                "rpcpassword": "AC4c4DaRA7onkcaWnyvV7VXbQbzw2qAkuxTMvSNpvpiQ",
+                "command": "publish",
+                "parameters": null,
+                "jsonData": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "stream": "{{$activity[set_stream_alerts].result}}",
+                      "key": "{{$activity[config].configData.DeviceID}}"
+                    },
+                    "mapTo": "parameters"
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "rule": "Temperature too high, Humidity too low",
+                      "data": {
+                        "temperature": "{{$activity[temperature].output}}",
+                        "humidity": "{{$activity[humidity].output}}"
+                      }
+                    },
+                    "mapTo": "jsonData"
+                  }
+                ]
+              }
+            }
+          },
+         {
+            "id": "set_stream_monitor",
+            "name": "SetStreamMonitor",
+            "description": "Map string",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/passthru",
+              "input": {},
+              "mappings": {
+                "input": [
+                  {
+                    "type": "expression",
+                    "value": "string.concat($activity[config].configData.CustomerID, \"_\", $activity[config].configData.SiteName,\"_monitor\")",
+                    "mapTo": "input"
+                  }
+                ]
+              }
+            }
+          },
+           {
+            "id": "log_dlt_data",
+            "name": "Log Data into Multichain Stream DLT",
+            "description": "Create entry on monitor multichain stream",
+            "activity": {
+              "ref": "github.com/ecarlier-tibco/flogo/activity/multichain",
+              "input": {
+                "chain": "demochain",
+                "host": "localhost",
+                "port": "6284",
+                "rpcuser": "multichainrpc",
+                "rpcpassword": "AC4c4DaRA7onkcaWnyvV7VXbQbzw2qAkuxTMvSNpvpiQ",
+                "command": "publish",
+                "parameters": null,
+                "jsonData": null
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "object",
+                    "value": {
+                      "stream": "{{$activity[set_stream_monitor].result}}",
+                      "key": "{{$activity[config].configData.DeviceID}}"
+                    },
+                    "mapTo": "parameters"
+                  },
+                  {
+                    "type": "object",
+                    "value": {
+                      "temperature": "{{$activity[aggregate_t].result}}",
+                      "humidity" : "{{$activity[aggregate_h].result}}"
+                    },
+                    "mapTo": "jsonData"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "set_alert_state_on",
+            "name": "GetAlertState",
+            "description": "Get Alert State",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/app",
+              "input": {
+                "attribute": "ALERT_STATE",
+                "operation": "UPDATE",
+                "type": "boolean",
+                "value": true 
+              }
+            }
+          },
+          {
+            "id": "log_alert",
+            "name": "LogAlert",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "message": "ALERT !!!",
+                "flowInfo": "false",
+                "addToFlow": "false"
+              }
+            }
+          }
+        ],
+        "links": [
+          {
+            "from": "config",
+            "to": "temperature"
+          },
+          {
+            "from": "temperature",
+            "to": "humidity"
+          },
+          {
+            "from": "humidity",
+            "to": "aggregate_t"
+          },
+          {
+            "from": "aggregate_t",
+            "to": "aggregate_h"
+          },
+         {
+            "from": "aggregate_h",
+            "to": "log_t",
+            "type": "expression",
+            "value": "$activity[aggregate_t].report"
+          },
+          {
+            "from": "log_t",
+            "to": "log_h"
+          },
+          {
+            "from": "log_h",
+            "to": "set_stream_monitor"
+          },
+          {
+            "from": "set_stream_monitor",
+            "to": "log_dlt_data"
+          },
+          {
+            "from": "humidity",
+            "to": "get_alert_state",
+            "type": "expression",
+            "value": "($activity[temperature].output > 11) && ($activity[humidity].output < 48)" 
+          },
+          {
+            "from": "get_alert_state",
+            "to": "log_alert",
+            "type": "expression",
+            "value": "$activity[get_alert_state].value != true" 
+          },
+          {
+            "from": "log_alert",
+            "to": "set_stream_alerts"
+          },
+          {
+            "from": "set_stream_alerts",
+            "to": "raise_alert"
+          },
+          {
+            "from": "raise_alert",
+            "to": "set_alert_state_on"
+          }
+        ]
+      }
+    },
+    {
+      "id": "flow:clear_alerts",
+      "data": {
+        "name": "ClearAlerts",
+        "metadata": {
+          "input": [
+            {
+              "name": "Device",
+              "type": "string"
+            }
+          ],
+          "output": [
+          ]
+        },
+        "tasks": [
+          {
+            "id": "log_clear_alert",
+            "name": "LogStart",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "flowInfo": "false",
+                "addToFlow": "false"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "expression",
+                    "value": "string.concat(\"Received CLEAR ALERT for Device \",$flow.Device)",
+                    "mapTo": "message"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "get_device_id",
+            "name": "GetDeviceID",
+            "description": "Get Device ID",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/app",
+              "input": {
+                "attribute": "DeviceID",
+                "operation": "GET",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "id": "set_alert_off",
+            "name": "SetAlertOff",
+            "description": "Set Alert OFF",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/app",
+              "input": {
+                "attribute": "ALERT_STATE",
+                "operation": "UPDATE",
+                "type": "boolean",
+                "value": false
+              }
+            }
+          },
+          {
+            "id": "log_done",
+            "name": "LogDone",
+            "description": "Simple Log Activity",
+            "activity": {
+              "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+              "input": {
+                "flowInfo": "false",
+                "addToFlow": "false"
+              },
+              "mappings": {
+                "input": [
+                  {
+                    "type": "expression",
+                    "value": "string.concat(\"ALERT CLEARED for Device \",$flow.Device)",
+                    "mapTo": "message"
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "links": [
+          {
+            "from": "log_clear_alert",
+            "to": "get_device_id"
+          },
+          {
+            "from": "get_device_id",
+            "to": "set_alert_off",
+            "type": "expression",
+            "value": "$activity[get_device_id].value == $flow.Device"
+          },
+          {
+            "from": "set_alert_off",
+            "to": "log_done"
+          }
+        ]
+      }
+    }
+  ]
+}

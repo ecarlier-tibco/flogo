@@ -1,0 +1,41 @@
+{
+    "Config": {
+        "Parameters": [
+            {
+                "Name" : "DeviceID",
+                "Type" : "string",
+                "Value": "DEV01"
+            },
+            {
+                "Name" : "Latitude",
+                "Type" : "number",
+                "Value": 48.875853
+            },
+	        {
+                "Name" : "Longitude",
+                "Type" : "number",
+                "Value": 2.302298
+            },
+            {
+                "Name" : "ALERT_STATE",
+                "Type" : "boolean",
+                "Value": false
+            },
+            {
+                "Name" : "CustomerID",
+                "Type" : "string",
+                "Value": "TIBCO"
+            },
+            {
+                "Name" : "SiteName",
+                "Type" : "string",
+                "Value": "BALZAC"
+            },
+            {
+                "Name" : "MeasureTypes",
+                "Type" : "array",
+                "Value": ["temperature","humidity"]
+            }
+        ]
+    }
+}
